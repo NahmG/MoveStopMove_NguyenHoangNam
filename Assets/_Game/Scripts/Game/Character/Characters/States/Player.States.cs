@@ -26,16 +26,13 @@ public class PlayerMoveState : MoveState
     {
         base.FixedUpdate();
 
+        if (Core.NAVIGATION.MoveDirection.sqrMagnitude < .01f) return;
+
         Vector3 move = Core.NAVIGATION.MoveDirection;
         move.y = 0;
 
         Core.DISPLAY.SetSkinRotation(Quaternion.LookRotation(move), true);
         Core.MOVEMENT.SetVelocity(move * Core.Stats.Speed.Value);
-
-        if (Core.SENSOR.IsGoUpBridge)
-            Core.MOVEMENT.ApplyGravity(0);
-        else
-            Core.MOVEMENT.ApplyGravity(100);
     }
 
     public override void Exit()

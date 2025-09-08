@@ -23,8 +23,7 @@ public class GameplayManager : Singleton<GameplayManager>
         LevelManager.Ins.OnInit();
         UIManager.Ins.OpenUI<UIMainMenu>();
 
-        currentLevel = LevelManager.Ins.LoadLevel();
-        SetCharacterStartPosition();
+        StartLevel();
     }
 
     public void StartLevel()
@@ -43,13 +42,10 @@ public class GameplayManager : Singleton<GameplayManager>
         isGameEnd = false;
         if (currentLevel == null)
         {
-            currentLevel = LevelManager.Ins.LoadLevel();
+            // currentLevel = LevelManager.Ins.LoadLevel();
         }
-        currentLevel.OnInit();
 
         mainCam.SetTarget(player.TF);
-
-        SetCharacterStartPosition();
     }
 
     void DestructLevel()
@@ -61,30 +57,8 @@ public class GameplayManager : Singleton<GameplayManager>
         }
     }
 
-    void SetCharacterStartPosition()
-    {
-        for (int i = 0; i < characters.Count; i++)
-        {
-            characters[i].TF.position = currentLevel.startingPos[i].position;
-            characters[i].TF.rotation = currentLevel.startingPos[i].rotation;
-        }
-    }
-
-    public void OnGameEnd(Character character)
+    public void OnGameEnd()
     {
         isGameEnd = true;
-        if (character is Player)
-        {
-            UIManager.Ins.OpenUI<UIWin>();
-        }
-        else
-        {
-            UIManager.Ins.OpenUI<UILose>();
-        }
-
-        //set cam target first place
-        mainCam.SetTarget(character.TF);
     }
-
-
 }

@@ -44,8 +44,6 @@ public class Character : GameUnit, ICharacter
     public virtual void OnDeath()
     {
         core.OnDeath();
-        LastBrickCount = brickStack.Count;
-        ClearBricks();
     }
 
     protected virtual void Update()
@@ -68,52 +66,6 @@ public class Character : GameUnit, ICharacter
         {
             Core.NAVIGATION.StopNavigation();
         }
-    }
-
-    #endregion
-
-    #region BRICK
-    [SerializeField]
-    Transform brickHoldPoint;
-    Stack<Brick> brickStack = new();
-    public int BrickCount => brickStack.Count;
-    public int LastBrickCount { get; private set; }
-
-    public void AddBrick()
-    {
-        Vector3 pos = brickHoldPoint.position + .2f * brickStack.Count * Vector3.up;
-        BrickOnChar brick = HBPool.Spawn<BrickOnChar>(PoolType.BRICK, pos, brickHoldPoint.rotation);
-
-        brick.OnInit();
-        brick.ChangeColor(Color);
-        brick.TF.SetParent(brickHoldPoint);
-
-        brickStack.Push(brick);
-    }
-
-    public void RemoveBrick()
-    {
-        if (brickStack.Count == 0) return;
-
-        Brick brick = brickStack.Pop();
-        brick.OnDespawn();
-        HBPool.Despawn(brick);
-    }
-
-    public void ClearBricks()
-    {
-        while (brickStack.Count > 0)
-            RemoveBrick();
-    }
-
-    #endregion
-
-    #region PLATFORM
-    protected List<BrickOnFloor> targetBricks = new();
-
-    public void SetTargetBrick(List<BrickOnFloor> bricks)
-    {
-        targetBricks = bricks;
     }
 
     #endregion

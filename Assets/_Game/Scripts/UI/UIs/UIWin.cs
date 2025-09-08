@@ -27,7 +27,6 @@ public class UIWin : UICanvas
     {
         base.Open(param);
 
-        brickCount.text = $"{GameplayManager.Ins.Player.LastBrickCount}";
     }
 
     void OnNextLvlBtnClick()

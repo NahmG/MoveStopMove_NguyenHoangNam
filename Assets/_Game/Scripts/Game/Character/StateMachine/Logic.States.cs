@@ -26,10 +26,6 @@ public abstract class GroundedState : BaseLogicState
 
     public override void Update()
     {
-        // if (!Core.SENSOR.IsGrounded)
-        // {
-        //     ChangeState(STATE.IN_AIR);
-        // }
     }
 }
 
@@ -87,8 +83,6 @@ public abstract class MoveState : GroundedState
 
     public override void FixedUpdate()
     {
-        if (Core.NAVIGATION.MoveDirection.sqrMagnitude < .01f)
-            return;
     }
 }
 

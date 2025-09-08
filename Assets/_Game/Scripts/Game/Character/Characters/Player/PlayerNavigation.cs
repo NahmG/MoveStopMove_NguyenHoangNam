@@ -6,8 +6,6 @@ namespace Core.Navigation
     {
         [SerializeField]
         Joystick stick;
-        [SerializeField]
-        CharacterController controller;
 
         bool isRunning;
 
@@ -26,13 +24,11 @@ namespace Core.Navigation
         public override void StartNavigation()
         {
             isRunning = true;
-            controller.enabled = true;
         }
 
         public override void StopNavigation()
         {
             isRunning = false;
-            controller.enabled = false;
         }
     }
 }

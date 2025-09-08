@@ -7,7 +7,7 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] Vector3 offsetRotation;
     [SerializeField] float speed = 15;
 
-    void LateUpdate()
+    void FixedUpdate()
     {
         if (target == null) return;
 
