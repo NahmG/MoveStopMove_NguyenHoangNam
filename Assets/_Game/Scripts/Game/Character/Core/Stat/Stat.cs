@@ -19,9 +19,18 @@ public class Stat
         _value = BaseValue;
     }
 
-    public void Add(float _amount)
+    public void Set(float _amount)
+    {
+        _value = _amount;
+    }
+
+    public void Plus(float _amount)
     {
         _value += _amount;
     }
 
+    public void Mult(float _amount)
+    {
+        _value *= _amount;
+    }
 }

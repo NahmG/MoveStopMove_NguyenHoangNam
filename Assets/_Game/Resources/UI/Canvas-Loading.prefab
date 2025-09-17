@@ -102,7 +102,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 127
 --- !u!114 &1772943137294824031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,9 +116,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDestroyOnClose: 0
+  anim: {fileID: 0}
   useAnimator: 0
   rectTf: {fileID: 6657521007598331462}
-  countText: {fileID: 3156433498085029859}
+  loadingTime: 0
 --- !u!1 &4811010577076340395
 GameObject:
   m_ObjectHideFlags: 0

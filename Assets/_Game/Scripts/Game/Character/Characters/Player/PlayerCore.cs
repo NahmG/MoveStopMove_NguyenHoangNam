@@ -7,24 +7,29 @@ public class PlayerCore : CoreSystem
     {
         base.Initialize(stats);
 
-        stateMachine = new StateMachine();
-        stateMachine.AddState(STATE.IDLE, new PlayerIdleState(this));
-        stateMachine.AddState(STATE.MOVE, new PlayerMoveState(this));
-        stateMachine.AddState(STATE.IN_AIR, new PlayerInAirState(this));
-        stateMachine.AddState(STATE.DEAD, new PlayerDeadState(this));
+        StateMachine.AddState(STATE.IDLE, new PlayerIdleState(this));
+        StateMachine.AddState(STATE.MOVE, new PlayerMoveState(this));
+        StateMachine.AddState(STATE.ATTACK, new PlayerAttackState(this));
+        StateMachine.AddState(STATE.DEAD, new PlayerDeadState(this));
+        StateMachine.AddState(STATE.WIN, new PlayerWinState(this));
+        StateMachine.AddState(STATE.SHOP_SKIN, new PlayerShopSkin(this));
+    }
 
-        stateMachine.Start(STATE.IDLE);
+    public override void Run()
+    {
+        base.Run();
+        StateMachine.Start(STATE.IDLE);
     }
 
     public override void UpdateData()
     {
         base.UpdateData();
-        stateMachine.Update();
+        StateMachine.Update();
     }
 
     public override void FixedUpdate()
     {
         base.FixedUpdate();
-        stateMachine.FixedUpdate();
+        StateMachine.FixedUpdate();
     }
 }

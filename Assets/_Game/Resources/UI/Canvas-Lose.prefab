@@ -315,7 +315,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 127
 --- !u!114 &175147777467531256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,6 +329,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDestroyOnClose: 0
+  anim: {fileID: 0}
   useAnimator: 0
   rectTf: {fileID: 5588330697191051491}
   replayBtn: {fileID: 4181057589007836147}

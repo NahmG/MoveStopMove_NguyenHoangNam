@@ -16,7 +16,7 @@ public class UILose : UICanvas
         replayBtn._OnClick -= OnReplayBtnClick;
     }
 
-    void OnReplayBtnClick()
+    void OnReplayBtnClick(int index)
     {
         Hide();
         UIManager.Ins.OpenUI<UILoading>();

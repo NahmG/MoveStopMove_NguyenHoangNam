@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Core.Sensor
 {
+    using System.Linq;
     using Navigation;
     public class SensorCore : BaseCore
     {
@@ -16,11 +17,7 @@ namespace Core.Sensor
         // ----------- DATA --------------
         public bool IsGrounded { get; internal set; }
         public bool IsGoUpBridge { get; internal set; }
-
-        public void ReceiveInfo(NavigationCore Navigation)
-        {
-            this.Navigation = Navigation;
-        }
+        public Character Target { get; internal set; }
 
         public override void Initialize(CoreSystem core)
         {
@@ -30,16 +27,21 @@ namespace Core.Sensor
             {
                 sensor.Initialize(this, Navigation);
             }
+
         }
 
         public override void UpdateData()
         {
-            base.UpdateData();
-
             foreach (var sensor in sensors)
             {
                 sensor.UpdateData();
             }
+        }
+
+        public void RemoveTarget()
+        {
+            DetectTarget targetSensor = sensors.First(x => x is DetectTarget) as DetectTarget;
+            targetSensor.RemoveTarget();
         }
     }
 }

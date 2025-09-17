@@ -669,7 +669,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 127
 --- !u!114 &8395138249906542747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -683,6 +683,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDestroyOnClose: 0
+  anim: {fileID: 0}
   useAnimator: 0
   rectTf: {fileID: 2662943626242200707}
   brickCount: {fileID: 7756270782682874718}

@@ -10,70 +10,90 @@ namespace Core
     using Navigation;
     using Movement;
     using Display;
+    using Sirenix.OdinInspector;
 
-    public abstract class CoreSystem : MonoBehaviour
+    public abstract class CoreSystem : SerializedMonoBehaviour
     {
         public CharacterStats Stats { get; private set; }
-        [SerializeField]
-        Character _character;
-        public Character CHARACTER => _character;
-        [SerializeField]
-        MovementCore _movement;
-        public MovementCore MOVEMENT => _movement;
-        [SerializeField]
-        DisplayCore _display;
-        public DisplayCore DISPLAY => _display;
-        [SerializeField]
-        NavigationCore _navigation;
-        public NavigationCore NAVIGATION => _navigation;
-        [SerializeField]
-        SensorCore _sensor;
-        public SensorCore SENSOR => _sensor;
+        [field: SerializeField]
+        public Character CHARACTER { get; private set; }
 
-        List<BaseCore> cores = new();
+        [SerializeField]
+        Dictionary<CORE_TYPE, BaseCore> coreDict;
 
-        public StateMachine stateMachine;
+        #region GET_CORE
 
-        void Awake()
+        enum CORE_TYPE
         {
-            SENSOR.ReceiveInfo(NAVIGATION);
+            ATTACK,
+            DISPLAY,
+            MOVEMENT,
+            NAVIGATION,
+            SENSOR
         }
+
+        //cache
+        AttackCore _atk;
+        DisplayCore _display;
+        MovementCore _move;
+        NavigationCore _nav;
+        SensorCore _sens;
+        //property
+        public AttackCore ATTACK => GetCore(CORE_TYPE.ATTACK, ref _atk);
+        public DisplayCore DISPLAY => GetCore(CORE_TYPE.DISPLAY, ref _display);
+        public MovementCore MOVEMENT => GetCore(CORE_TYPE.MOVEMENT, ref _move);
+        public NavigationCore NAVIGATION => GetCore(CORE_TYPE.NAVIGATION, ref _nav);
+        public SensorCore SENSOR => GetCore(CORE_TYPE.SENSOR, ref _sens);
+        #endregion
+
+        public StateMachine StateMachine { get; private set; }
+        bool isInit;
 
         public virtual void Initialize(CharacterStats stats)
         {
             Stats = stats;
 
-            MOVEMENT.Initialize(this);
-            DISPLAY.Initialize(this);
-            NAVIGATION.Initialize(this);
-            SENSOR.Initialize(this);
+            foreach (var id in coreDict.Keys)
+            {
+                coreDict[id].Initialize(this);
+            }
+
+            StateMachine = new StateMachine();
+
+            isInit = true;
         }
+
+        public virtual void Run() { }
 
         public virtual void UpdateData()
         {
-            foreach (var comp in cores)
+            if (!isInit) return;
+
+            foreach (var id in coreDict.Keys)
             {
-                comp.UpdateData();
+                coreDict[id].UpdateData();
             }
         }
 
         public virtual void FixedUpdate()
         {
-            foreach (var comp in cores)
+            if (!isInit) return;
+
+            foreach (var id in coreDict.Keys)
             {
-                comp.FixedUpdateData();
+                coreDict[id].FixedUpdateData();
             }
         }
 
-        public void AddCoreComp(BaseCore comp)
+        public void OnDespawn()
         {
-            if (!cores.Contains(comp))
-                cores.Add(comp);
+            StateMachine.ChangeState(STATE.DEAD);
+            isInit = false;
         }
 
-        public void OnDeath()
+        T GetCore<T>(CORE_TYPE id, ref T cache) where T : BaseCore
         {
-            stateMachine.ChangeState(STATE.DEAD);
+            return cache ??= coreDict[id] as T;
         }
     }
 }

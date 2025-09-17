@@ -1,34 +1,42 @@
 using System;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIButton : MonoBehaviour
 {
-    public Action _OnClick;
+    public Action<int> _OnClick;
 
     public enum STATE
     {
         DISABLE = 0,
-        ACTIVE = 1
+        OPENING = 1,
+        SELECTING = 2,
+        CLOSING = 3,
     }
 
     [SerializeField] Button button;
+    [SerializeField] int index;
+    [SerializeField] bool hasComponent;
+
+    [ShowIfGroup("Extra", Condition = "hasComponent")]
+    [ShowIfGroup("Extra")]
     [SerializeField] TMP_Text textButton;
-    [SerializeField] Image imageButton;
-    [SerializeField] Sprite[] sprites;
-    [SerializeField] string[] text;
+    [ShowIfGroup("Extra")]
+    [SerializeField] protected UIButtonComponent[] buttonComponents;
 
     STATE state;
+    public STATE State => state;
 
     void Awake()
     {
-        button.onClick.AddListener(() => _OnClick?.Invoke());
+        button.onClick.AddListener(OnBtnClick);
     }
 
     void OnDestroy()
     {
-        button.onClick.RemoveListener(() => _OnClick?.Invoke());
+        button.onClick.RemoveListener(OnBtnClick);
     }
 
     public void SetData(string text)
@@ -40,20 +48,30 @@ public class UIButton : MonoBehaviour
     public void SetState(STATE state)
     {
         this.state = state;
-
-        if (imageButton != null && sprites.Length > (int)state)
+        for (int i = 0; i < buttonComponents.Length; i++)
         {
-            imageButton.sprite = sprites[(int)state];
+            buttonComponents[i].SetState(state);
         }
-        if (text.Length > (int)state)
+    }
+
+    public void SetState(int state)
+    {
+        this.state = (STATE)state;
+        for (int i = 0; i < buttonComponents.Length; i++)
         {
-            SetData(text[(int)state]);
+            buttonComponents[i].SetState(this.state);
         }
     }
 
     public void SetInteractive(bool state)
     {
         button.interactable = state;
+    }
+
+    void OnBtnClick()
+    {
+        //play sound
+        _OnClick?.Invoke(index);
     }
 }
 

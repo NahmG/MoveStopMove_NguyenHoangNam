@@ -31,8 +31,18 @@ namespace Core.Navigation
         public override void StopNavigation()
         {
             isRunning = false;
-            _enemy.Core.MOVEMENT.StopMovement();
             agent.enabled = false;
+        }
+
+        public bool ReachDestination()
+        {
+            return agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending;
+        }
+
+        public void GetRandomDestination()
+        {
+            if (isRunning)
+                Destination = LevelManager.Ins.RandomPoint();
         }
     }
 

@@ -75,5 +75,6 @@ public enum PoolType
     NONE = 0,
     PLAYER = 1,
     ENEMY = 2,
-    BRICK = 100
+    HAMMER = 100,
+    KNIFE = 101,
 }

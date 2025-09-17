@@ -20,19 +20,19 @@ public abstract class GroundedState : BaseLogicState
     {
     }
 
-    public override void Enter()
+    protected float GetRandomTime(float min, float max)
     {
-    }
-
-    public override void Update()
-    {
+        return Random.Range(min, max);
     }
 }
 
 public abstract class IdleState : GroundedState
 {
+    protected Character _char;
+
     protected IdleState(CoreSystem core) : base(core)
     {
+        _char = Core.CHARACTER;
     }
 
     public override STATE Id => STATE.IDLE;
@@ -50,6 +50,11 @@ public abstract class IdleState : GroundedState
         if (Core.NAVIGATION.MoveDirection.sqrMagnitude > .01f)
         {
             ChangeState(STATE.MOVE);
+        }
+
+        else if (Core.SENSOR.Target != null && !Core.ATTACK.IsAtkCooldown)
+        {
+            ChangeState(STATE.ATTACK);
         }
     }
 
@@ -80,19 +85,12 @@ public abstract class MoveState : GroundedState
             ChangeState(STATE.IDLE);
         }
     }
-
-    public override void FixedUpdate()
-    {
-    }
 }
 
 public abstract class InAirState : BaseLogicState
 {
+    public override STATE Id => STATE.IN_AIR;
     protected InAirState(CoreSystem core) : base(core)
-    {
-    }
-
-    public override void Enter()
     {
     }
 
@@ -113,16 +111,75 @@ public abstract class InAirState : BaseLogicState
     }
 }
 
-public abstract class DeadState : BaseLogicState
+public abstract class AttackState : BaseLogicState
 {
-    public override STATE Id => STATE.DEAD;
-    protected DeadState(CoreSystem core) : base(core)
+    public override STATE Id => STATE.ATTACK;
+    protected Character _char;
+
+    protected float timer;
+
+    protected AttackState(CoreSystem core) : base(core)
     {
+        _char = core.CHARACTER;
     }
 
     public override void Enter()
     {
-        Core.DISPLAY.ChangeAnim(CONSTANTS.IDLE_ANIM_NAME);
+        base.Enter();
+        timer = Time.time;
+        RotateTowardTarget();
+
+        if (_char.IsUlti)
+        {
+            Core.DISPLAY.ChangeAnim(CONSTANTS.ULTI_ANIM_NAME);
+        }
+        Core.DISPLAY.ChangeAnim(CONSTANTS.ATTACK_ANIM_NAME);
+    }
+
+    public override void Update()
+    {
+        if (Core.NAVIGATION.MoveDirection.sqrMagnitude > .01f)
+        {
+            ChangeState(STATE.MOVE);
+        }
+
+        if (Core.SENSOR.Target == null)
+        {
+            ChangeState(STATE.IDLE);
+        }
+
+        if (Time.time >= timer + Core.DISPLAY.AtkDuration)
+        {
+            ChangeState(STATE.IDLE);
+        }
+    }
+
+    protected virtual void RotateTowardTarget() { }
+}
+
+public abstract class DeadState : BaseLogicState
+{
+    public override STATE Id => STATE.DEAD;
+    Character _char;
+    float timer;
+
+    protected DeadState(CoreSystem core) : base(core)
+    {
+        _char = core.CHARACTER;
+    }
+
+    public override void Enter()
+    {
+        Core.DISPLAY.ChangeAnim(CONSTANTS.DEAD_ANIM_NAME);
+        timer = Time.time;
+
+        Core.MOVEMENT.StopMovement();
+    }
+
+    public override void Update()
+    {
+        if (Time.time >= timer + Core.DISPLAY.DeadDuration)
+            _char.OnDespawn();
     }
 }
 #endregion

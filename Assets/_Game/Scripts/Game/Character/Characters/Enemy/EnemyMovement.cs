@@ -1,3 +1,4 @@
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,6 +8,12 @@ namespace Core.Movement
     {
         [SerializeField]
         NavMeshAgent agent;
+
+        public override void Initialize(CoreSystem core)
+        {
+            base.Initialize(core);
+            agent.speed = core.Stats.Speed.Value;
+        }
 
         public override void UpdateData()
         {

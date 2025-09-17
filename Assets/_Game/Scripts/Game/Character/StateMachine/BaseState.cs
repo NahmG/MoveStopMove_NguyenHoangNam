@@ -6,11 +6,11 @@ public enum STATE
     IDLE,
     MOVE,
     IN_AIR,
+    ATTACK,
+    ULTI,
     DEAD,
-    FIND_BRICK,
-    BUILD_BRIDGE,
-    FIND_DOOR,
-    GO_TO_FINISH_LINE
+    WIN,
+    SHOP_SKIN,
 }
 
 [Serializable]
@@ -18,13 +18,15 @@ public abstract class BaseState
 {
     public event Action<STATE> _OnStateChanged;
     public abstract STATE Id { get; }
-    public abstract void Enter();
-    public abstract void Update();
-    public abstract void FixedUpdate();
-    public abstract void Exit();
+    public virtual void Enter() { }
+    public virtual void Update() { }
+    public virtual void FixedUpdate() { }
+    public virtual void Exit() { }
+    public virtual void UnregisterEvent() { }
     protected void ChangeState(STATE newState)
     {
         _OnStateChanged?.Invoke(newState);
     }
+
 }
 

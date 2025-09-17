@@ -1,0 +1,110 @@
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.AI;
+
+public class EnemySpawn : Singleton<EnemySpawn>
+{
+    [SerializeField]
+    int maxEnemy;
+    [SerializeField]
+    int maxEnemyOnField;
+
+    public List<Enemy> Enemies { get; private set; } = new();
+    int _remainingEnemy;
+    public int RemainEnemy => _remainingEnemy;
+
+    #region SET_UP
+
+    public void OnInit()
+    {
+        _remainingEnemy = maxEnemy;
+
+        //spawn initial enemies
+        for (int i = 0; i < maxEnemyOnField; i++)
+        {
+            Spawn(out _);
+        }
+    }
+
+    public void OnDespawn()
+    {
+        DespawnAllEnemy();
+    }
+    #endregion
+
+    #region SPAWN_FUNC
+    void Spawn(out Enemy e)
+    {
+        e = HBPool.Spawn<Enemy>(PoolType.ENEMY, GetSpawnPos(), Quaternion.identity);
+        e.OnInit();
+
+        Enemies.Add(e);
+        _remainingEnemy--;
+    }
+
+    void Despawn(Enemy enemy)
+    {
+        HBPool.Despawn(enemy);
+
+        if (Enemies.Contains(enemy))
+            Enemies.Remove(enemy);
+    }
+
+    void DespawnAllEnemy()
+    {
+        foreach (var enemy in Enemies)
+        {
+            HBPool.Despawn(enemy);
+        }
+        Enemies.Clear();
+        _remainingEnemy = 0;
+    }
+
+    public void OnEnemyDespawn(Enemy enemy)
+    {
+        //Despawn old 
+        Despawn(enemy);
+
+        //Spawn new one
+        if (_remainingEnemy > 0)
+        {
+            Spawn(out Enemy e);
+            e.Run();
+        }
+    }
+
+    Vector3 GetSpawnPos()
+    {
+        Vector3 spawnPos;
+        int attempts = 0;
+        do
+        {
+            attempts++;
+
+            spawnPos = LevelManager.Ins.RandomPoint();
+            if (IsValidPos(spawnPos))
+                return spawnPos;
+
+        } while (attempts < 10000);
+
+        Debug.LogWarning("No valid spawn position found!");
+        return spawnPos;
+    }
+
+    bool IsValidPos(Vector3 pos)
+    {
+        List<Character> chars = new(Enemies)
+            {
+                GameplayManager.Ins.Player
+            };
+        foreach (var _char in chars)
+        {
+            float dist = Vector3.Distance(pos, _char.TF.position);
+            if (dist <= _char.Stats.AtkRange.BaseValue * 2)
+                return false;
+        }
+        return true;
+    }
+
+    #endregion
+}

@@ -29,13 +29,13 @@ public class UIWin : UICanvas
 
     }
 
-    void OnNextLvlBtnClick()
+    void OnNextLvlBtnClick(int index)
     {
         Hide();
         UIManager.Ins.OpenUI<UILoading>();
     }
 
-    void OnReplayBtnClick()
+    void OnReplayBtnClick(int index)
     {
         Hide();
         UIManager.Ins.OpenUI<UILoading>();

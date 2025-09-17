@@ -4,14 +4,35 @@ namespace Core.Display
 {
     public class DisplayCore : BaseCore
     {
+        [field: SerializeField]
+        public float AtkDuration { get; private set; }
+        [field: SerializeField]
+        public float DeadDuration { get; private set; }
+
         [SerializeField]
         Animator anim;
         [SerializeField]
         Transform skinTf;
         [SerializeField]
         Transform sensorTf;
+        string currentAnim = "Idle";
 
-        string currentAnim;
+        float _scale;
+        public float Scale
+        {
+            get => _scale;
+            set
+            {
+                _scale = value;
+                skinTf.localScale = Vector3.one * _scale;
+            }
+        }
+
+        public override void Initialize(CoreSystem core)
+        {
+            base.Initialize(core);
+            Scale = 1;
+        }
 
         public void SetSkinRotation(Quaternion rotation, bool isLocal)
         {
@@ -44,32 +65,7 @@ namespace Core.Display
 
         public void ChangeColor(COLOR color)
         {
-            var colorData = Resources.Load<ColorData>("ColorData");
-            Color c = Color.white;
-            switch (color)
-            {
-                case COLOR.BLUE:
-                    c = colorData.blue;
-                    break;
-                case COLOR.RED:
-                    c = colorData.red;
-                    break;
-                case COLOR.YELLOW:
-                    c = colorData.yellow;
-                    break;
-                case COLOR.GREEN:
-                    c = colorData.green;
-                    break;
-                default:
-                    break;
-            }
-            foreach (var r in skinTf.GetComponentsInChildren<Renderer>())
-            {
-                foreach (var m in r.materials)
-                {
-                    m.color = c;
-                }
-            }
+
         }
     }
 }

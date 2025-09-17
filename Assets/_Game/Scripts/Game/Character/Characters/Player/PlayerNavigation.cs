@@ -9,6 +9,11 @@ namespace Core.Navigation
 
         bool isRunning;
 
+        void Awake()
+        {
+            EnableJoystick(false);
+        }
+
         public override void UpdateData()
         {
             if (!isRunning) return;
@@ -24,11 +29,19 @@ namespace Core.Navigation
         public override void StartNavigation()
         {
             isRunning = true;
+            EnableJoystick(true);
         }
 
         public override void StopNavigation()
         {
             isRunning = false;
+            EnableJoystick(false);
+
+        }
+
+        void EnableJoystick(bool isOn)
+        {
+            stick.gameObject.SetActive(isOn);
         }
     }
 }

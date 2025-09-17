@@ -4,18 +4,15 @@ using UnityEngine;
 
 public class GameplayManager : Singleton<GameplayManager>
 {
-    [SerializeField]
-    Player playerPref;
-    [SerializeField]
-    CameraFollow mainCam;
+    public CameraFollow mainCam;
 
     [SerializeField]
     Player player;
     public Player Player => player;
-    public List<Character> characters;
     [SerializeField]
     Level currentLevel;
 
+    List<Character> characters = new();
     bool isGameEnd;
 
     void Start()
@@ -23,12 +20,16 @@ public class GameplayManager : Singleton<GameplayManager>
         LevelManager.Ins.OnInit();
         UIManager.Ins.OpenUI<UIMainMenu>();
 
-        StartLevel();
+        mainCam.ChangeCamera(CAMERA_TYPE.MENU);
+
+        ReconstructLevel();
     }
 
     public void StartLevel()
     {
-        characters.ForEach(e => e.OnInit());
+        characters.ForEach(x => x.Run());
+
+        mainCam.ChangeCamera(CAMERA_TYPE.GAME_PLAY);
     }
 
     public void ReconstructLevel()
@@ -42,10 +43,18 @@ public class GameplayManager : Singleton<GameplayManager>
         isGameEnd = false;
         if (currentLevel == null)
         {
-            // currentLevel = LevelManager.Ins.LoadLevel();
+            currentLevel = LevelManager.Ins.LoadLevel();
         }
 
         mainCam.SetTarget(player.TF);
+
+        //set up character
+        EnemySpawn.Ins.OnInit();
+        player.OnInit();
+
+        characters.Clear();
+        characters.Add(Player);
+        characters.AddRange(EnemySpawn.Ins.Enemies);
     }
 
     void DestructLevel()
@@ -55,10 +64,13 @@ public class GameplayManager : Singleton<GameplayManager>
             Destroy(currentLevel.gameObject);
             currentLevel = null;
         }
+
+        EnemySpawn.Ins.OnDespawn();
     }
 
     public void OnGameEnd()
     {
         isGameEnd = true;
+
     }
 }

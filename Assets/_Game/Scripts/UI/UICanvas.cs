@@ -1,4 +1,5 @@
 ﻿using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -8,9 +9,15 @@ public class UICanvas : MonoBehaviour
     [FormerlySerializedAs("IsDestroyOnClose")]
     public bool isDestroyOnClose;
 
+    [Header("Anim")]
     [SerializeField]
     private bool useAnimator;
+    [ShowIf("useAnimator")]
+    [SerializeField]
+    Animator anim;
+    string currentAnim = "Open";
 
+    [Header("Ref")]
     [SerializeField]
     private RectTransform rectTf;
     public RectTransform RectTf => rectTf;
@@ -52,8 +59,6 @@ public class UICanvas : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-
-
     public virtual void UpdateUI() { }
 
     public virtual void Close()
@@ -76,4 +81,15 @@ public class UICanvas : MonoBehaviour
         gameObject.SetActive(false);
         if (isDestroyOnClose) Destroy(gameObject);
     }
+
+    public void ChangeAnim(string animName)
+    {
+        if (animName != currentAnim)
+        {
+            anim.ResetTrigger(currentAnim);
+            currentAnim = animName;
+            anim.SetTrigger(currentAnim);
+        }
+    }
+
 }

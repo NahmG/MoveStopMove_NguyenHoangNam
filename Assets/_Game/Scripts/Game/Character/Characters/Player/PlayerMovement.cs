@@ -5,19 +5,23 @@ namespace Core.Movement
     public class PlayerMovement : MovementCore
     {
         [SerializeField]
-        Rigidbody Rb;
+        Transform TF;
         Vector3 velocity;
 
-        public override void FixedUpdateData()
+        public override void UpdateData()
         {
-            base.FixedUpdateData();
-
-            Rb.linearVelocity = velocity;
+            base.UpdateData();
+            TF.Translate(velocity * Time.deltaTime);
         }
 
         public override void SetVelocity(Vector3 velocity)
         {
             this.velocity = velocity;
+        }
+
+        public override void StopMovement()
+        {
+            velocity = Vector3.zero;
         }
     }
 }

@@ -6,3 +6,11 @@ public enum COLOR
     YELLOW,
     GREEN,
 }
+
+public enum BULLET_TYPE
+{
+    NONE,
+    HAMMER,
+    KNIFE,
+
+}

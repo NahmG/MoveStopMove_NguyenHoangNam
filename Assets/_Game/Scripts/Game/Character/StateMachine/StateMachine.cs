@@ -6,20 +6,20 @@ using UnityEngine;
 public class StateMachine
 {
     private BaseState currentState;
-    private Dictionary<STATE, BaseState> states;
+    private Dictionary<STATE, BaseState> _states;
     public bool IsDebug;
 
     public STATE CurrentState => currentState.Id;
-    public Dictionary<STATE, BaseState> States => states;
+    public Dictionary<STATE, BaseState> States => _states;
 
     public StateMachine()
     {
-        states = new Dictionary<STATE, BaseState>();
+        _states = new Dictionary<STATE, BaseState>();
     }
 
     public void Start(STATE id)
     {
-        currentState = states[id];
+        currentState = _states[id];
         currentState?.Enter();
 
         if (IsDebug)
@@ -36,19 +36,19 @@ public class StateMachine
 
     public void AddState(STATE id, BaseState state)
     {
-        if (!states.ContainsKey(id))
+        if (!_states.ContainsKey(id))
         {
-            states.Add(id, state);
-            states[id]._OnStateChanged += ChangeState;
+            _states.Add(id, state);
+            _states[id]._OnStateChanged += ChangeState;
         }
     }
 
     public void RemoveState(STATE id)
     {
-        if (states.ContainsKey(id))
+        if (_states.ContainsKey(id))
         {
-            states[id]._OnStateChanged -= ChangeState;
-            states.Remove(id);
+            _states[id]._OnStateChanged -= ChangeState;
+            _states.Remove(id);
         }
     }
     public void ChangeState(STATE id)
@@ -58,12 +58,12 @@ public class StateMachine
             Debug.Log($"Change state from {currentState?.Id} to {id}");
         }
 
-        if (!states.ContainsKey(id))
+        if (!_states.ContainsKey(id))
         {
             Debug.Log($"Key {id} STATE Invalid");
         }
         currentState?.Exit();
-        currentState = states[id];
+        currentState = _states[id];
         currentState?.Enter();
     }
     public void Update()
