@@ -14,8 +14,8 @@ public class UIMainMenu : UICanvas
     void Awake()
     {
         playBtn._OnClick += OnPlayButtonClick;
-        skinShop._OnClick += OnSkinShopBtnClick;
-        weaponShop._OnClick += OnWeaponShopBtnClick;
+        skinShop._OnClick += OnShopBtnClick;
+        weaponShop._OnClick += OnShopBtnClick;
 
         functionBtn.ForEach(x => x._OnClick += OnFuntionBtnClick);
     }
@@ -23,8 +23,8 @@ public class UIMainMenu : UICanvas
     void OnDestroy()
     {
         playBtn._OnClick -= OnPlayButtonClick;
-        skinShop._OnClick -= OnSkinShopBtnClick;
-        weaponShop._OnClick -= OnWeaponShopBtnClick;
+        skinShop._OnClick -= OnShopBtnClick;
+        weaponShop._OnClick -= OnShopBtnClick;
 
         functionBtn.ForEach(x => x._OnClick -= OnFuntionBtnClick);
     }
@@ -33,24 +33,28 @@ public class UIMainMenu : UICanvas
     {
         base.Open(param);
 
-        GameplayManager.Ins.Player.ChangeState(STATE.IDLE);
+        GameplayManager.Ins.mainCam.ChangeCamera(CAMERA_TYPE.MENU);
     }
 
     void OnPlayButtonClick(int index)
     {
         Hide();
+        UIManager.Ins.OpenUI<UIGameplay>();
         GameplayManager.Ins.StartLevel();
     }
 
-    void OnSkinShopBtnClick(int index)
+    void OnShopBtnClick(int index)
     {
         Hide();
-        UIManager.Ins.OpenUI<UIShopSkin>();
-    }
-
-    void OnWeaponShopBtnClick(int index)
-    {
-
+        switch (index)
+        {
+            case 0:
+                UIManager.Ins.OpenUI<UIShopSkin>();
+                break;
+            case 1:
+                UIManager.Ins.OpenUI<UIShopWeapon>();
+                break;
+        }
     }
 
     void OnFuntionBtnClick(int index)

@@ -7,7 +7,7 @@ public static class CONSTANTS
     public const string ULTI_ANIM_NAME = "Ulti";
     public const string DEAD_ANIM_NAME = "Dead";
     public const string WIN_ANIM_NAME = "Dance_Win";
-    public const string SHOP_SKIN_ANIM_NAME = "Dance_Skin";
+    public const string SHOP_SKIN_ANIM_NAME = "Dance_Shop";
 
     //file path
     public const string COLOR_DATA_PATH = "ColorData";

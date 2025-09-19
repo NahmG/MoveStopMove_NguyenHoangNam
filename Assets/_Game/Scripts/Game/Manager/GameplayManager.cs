@@ -28,7 +28,6 @@ public class GameplayManager : Singleton<GameplayManager>
     public void StartLevel()
     {
         characters.ForEach(x => x.Run());
-
         mainCam.ChangeCamera(CAMERA_TYPE.GAME_PLAY);
     }
 

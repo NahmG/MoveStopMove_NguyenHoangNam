@@ -46,19 +46,10 @@ public class AttackCore : BaseCore
 
     public void UseSkill()
     {
-        ICharacter target = _sens.Target;
-        if (target == null)
-        {
-            Debug.LogWarning("Target escape");
-            return;
-        }
-
-        Vector3 moveDir = target.TF.position - _char.TF.position;
-        moveDir.y = 0;
-
         BulletBase bullet = HBPool.Spawn<BulletBase>(bulletType, shootPoint.position, Quaternion.identity);
         float size = _char.Core.DISPLAY.Scale;
-        bullet.Fire(moveDir, _char, size);
+        Vector3 dir = _char.Core.SENSOR.TargetDir;
+        bullet.Fire(dir, _char, size);
 
         _isAtkCooldown = true;
         timer = Time.time;

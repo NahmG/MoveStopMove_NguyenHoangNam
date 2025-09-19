@@ -10,14 +10,17 @@ public class EnemySpawn : Singleton<EnemySpawn>
     int maxEnemyOnField;
 
     public List<Enemy> Enemies { get; private set; } = new();
-    int _remainingEnemy;
-    public int RemainEnemy => _remainingEnemy;
+    int availableEnemy;
+
+    int _enemyCount;
+    public int CurrentEnemyCount => _enemyCount;
 
     #region SET_UP
 
     public void OnInit()
     {
-        _remainingEnemy = maxEnemy;
+        availableEnemy = maxEnemy;
+        _enemyCount = maxEnemy;
 
         //spawn initial enemies
         for (int i = 0; i < maxEnemyOnField; i++)
@@ -39,12 +42,13 @@ public class EnemySpawn : Singleton<EnemySpawn>
         e.OnInit();
 
         Enemies.Add(e);
-        _remainingEnemy--;
+        availableEnemy--;
     }
 
     void Despawn(Enemy enemy)
     {
         HBPool.Despawn(enemy);
+        _enemyCount--;
 
         if (Enemies.Contains(enemy))
             Enemies.Remove(enemy);
@@ -57,7 +61,7 @@ public class EnemySpawn : Singleton<EnemySpawn>
             HBPool.Despawn(enemy);
         }
         Enemies.Clear();
-        _remainingEnemy = 0;
+        availableEnemy = 0;
     }
 
     public void OnEnemyDespawn(Enemy enemy)
@@ -66,7 +70,7 @@ public class EnemySpawn : Singleton<EnemySpawn>
         Despawn(enemy);
 
         //Spawn new one
-        if (_remainingEnemy > 0)
+        if (availableEnemy > 0)
         {
             Spawn(out Enemy e);
             e.Run();

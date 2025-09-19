@@ -27,6 +27,13 @@ public class DetectTarget : BaseSensor
 
         UpdateTargetCollection();
         UpdateTargetState();
+
+        if (_currentTarget != null)
+        {
+            Vector3 dir = _currentTarget.TF.position - _char.TF.position;
+            dir.y = 0;
+            Sensor.TargetDir = dir.normalized;
+        }
     }
 
     void UpdateTargetState()
@@ -41,8 +48,6 @@ public class DetectTarget : BaseSensor
         {
             RemoveTarget();
         }
-
-        Sensor.Target = _currentTarget;
     }
 
     void UpdateTargetCollection()
@@ -81,6 +86,8 @@ public class DetectTarget : BaseSensor
             }
             else index++;
         }
+
+        Sensor.Target = _currentTarget;
     }
 
     public void RemoveTarget()

@@ -17,7 +17,7 @@ public class UIButton : MonoBehaviour
     }
 
     [SerializeField] Button button;
-    [SerializeField] int index;
+    [SerializeField] protected int index;
     [SerializeField] bool hasComponent;
 
     [ShowIfGroup("Extra", Condition = "hasComponent")]

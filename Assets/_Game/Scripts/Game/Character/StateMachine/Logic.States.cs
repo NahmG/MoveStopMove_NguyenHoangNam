@@ -143,11 +143,6 @@ public abstract class AttackState : BaseLogicState
             ChangeState(STATE.MOVE);
         }
 
-        if (Core.SENSOR.Target == null)
-        {
-            ChangeState(STATE.IDLE);
-        }
-
         if (Time.time >= timer + Core.DISPLAY.AtkDuration)
         {
             ChangeState(STATE.IDLE);

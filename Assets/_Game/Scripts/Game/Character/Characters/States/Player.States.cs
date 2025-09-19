@@ -49,10 +49,7 @@ public class PlayerAttackState : AttackState
     {
         base.RotateTowardTarget();
 
-        ICharacter target = Core.SENSOR.Target;
-        Vector3 dir = target.TF.position - _char.TF.position;
-        dir.y = 0;
-
+        Vector3 dir = Core.SENSOR.TargetDir;
         Core.DISPLAY.SetSkinRotation(Quaternion.LookRotation(dir), true);
     }
 }

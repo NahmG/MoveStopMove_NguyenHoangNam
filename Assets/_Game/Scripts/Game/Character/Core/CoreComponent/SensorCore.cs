@@ -18,6 +18,7 @@ namespace Core.Sensor
         public bool IsGrounded { get; internal set; }
         public bool IsGoUpBridge { get; internal set; }
         public Character Target { get; internal set; }
+        public Vector3 TargetDir { get; internal set; }
 
         public override void Initialize(CoreSystem core)
         {
@@ -27,7 +28,6 @@ namespace Core.Sensor
             {
                 sensor.Initialize(this, Navigation);
             }
-
         }
 
         public override void UpdateData()
