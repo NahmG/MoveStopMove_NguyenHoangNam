@@ -2,27 +2,41 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public abstract class EquipComponent : MonoBehaviour
+public class EquipComponent
 {
-    public abstract EQUIP_TYPE ID { get; }
+    public EQUIP_TYPE ID;
 
     [SerializeField]
     Transform parentTF;
-    [SerializeField]
-    GameObject model;
+    EquipmentModel modelPref;
 
-    GameObject currentModel;
+    int currentIndex;
+    public int CurrentIndex => currentIndex;
+    EquipmentModel currentModel;
 
-    public virtual void Equip()
+    public void Start()
     {
-        if (currentModel == null)
-            Instantiate(model, parentTF);
+        currentIndex = -1;
     }
 
-    public virtual void Remove()
+    public virtual void Equip(int index)
+    {
+        if (currentIndex == index) return;
+
+        if (currentIndex >= 0)
+        {
+            UnEquip();
+        }
+
+        currentIndex = index;
+        modelPref ??= DataManager.Ins.GetModel(ID);
+        currentModel = GameObject.Instantiate(modelPref, parentTF);
+    }
+
+    public virtual void UnEquip()
     {
         if (currentModel != null)
-            Destroy(currentModel);
+            GameObject.Destroy(currentModel);
 
         currentModel = null;
     }

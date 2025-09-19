@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(UIShopWeapon))]
 public class WeaponDisplayComponent : MonoBehaviour
 {
     public Action<WeaponData> _OnWeaponSelect;

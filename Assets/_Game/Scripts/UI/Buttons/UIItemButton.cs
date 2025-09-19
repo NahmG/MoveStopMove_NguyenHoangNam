@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class UIItemButton : UIButton
 {
-
     [Header("Item")]
     [SerializeField] GameObject frameSelect;
     [SerializeField] GameObject itemLock;
@@ -19,7 +18,7 @@ public class UIItemButton : UIButton
 
     public void UpdateItem()
     {
-        itemIcon.sprite = data.image;
+        itemIcon.sprite = data.icon;
         itemLock.SetActive(data.isLock);
     }
 
@@ -39,7 +38,7 @@ public class UIItemButton : UIButton
 [Serializable]
 public class ItemData
 {
-    public Sprite image;
+    public Sprite icon;
     public bool isLock;
     public int cost;
     public string description;

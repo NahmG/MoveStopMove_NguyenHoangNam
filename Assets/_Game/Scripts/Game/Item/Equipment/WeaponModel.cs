@@ -1,12 +1,6 @@
 using UnityEngine;
 
-public class WeaponModel : MonoBehaviour
+public class WeaponModel : EquipmentModel
 {
-    [SerializeField]
-    Renderer rend;
 
-    public void ChangeSkin(Material material)
-    {
-        rend.sharedMaterial = material;
-    }
 }
