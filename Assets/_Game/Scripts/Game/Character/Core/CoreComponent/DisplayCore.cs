@@ -8,7 +8,8 @@ namespace Core.Display
         public float AtkDuration { get; private set; }
         [field: SerializeField]
         public float DeadDuration { get; private set; }
-
+        [field: SerializeField]
+        public CharacterEquipment Equipment { get; private set; }
         [SerializeField]
         Animator anim;
         [SerializeField]
@@ -32,6 +33,7 @@ namespace Core.Display
         {
             base.Initialize(core);
             Scale = 1;
+            Equipment?.Initialize();
         }
 
         public void SetSkinRotation(Quaternion rotation, bool isLocal)

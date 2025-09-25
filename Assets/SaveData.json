@@ -1,0 +1,155 @@
+{
+    "serializationData": {
+        "SerializedFormat": 2,
+        "SerializedBytes": [],
+        "ReferencedUnityObjects": [],
+        "SerializedBytesString": "",
+        "Prefab": {
+            "instanceID": 0
+        },
+        "PrefabModificationsReferencedUnityObjects": [],
+        "PrefabModifications": [],
+        "SerializationNodes": []
+    },
+    "allItems": [
+        {
+            "shop": 0,
+            "items": [
+                {
+                    "instanceID": 44608
+                },
+                {
+                    "instanceID": 44474
+                },
+                {
+                    "instanceID": 44372
+                },
+                {
+                    "instanceID": 44336
+                },
+                {
+                    "instanceID": 44428
+                },
+                {
+                    "instanceID": 44434
+                },
+                {
+                    "instanceID": 44654
+                },
+                {
+                    "instanceID": 44524
+                },
+                {
+                    "instanceID": 44574
+                },
+                {
+                    "instanceID": 44588
+                }
+            ]
+        },
+        {
+            "shop": 1,
+            "items": [
+                {
+                    "instanceID": 44552
+                },
+                {
+                    "instanceID": 44576
+                },
+                {
+                    "instanceID": 44470
+                },
+                {
+                    "instanceID": 44514
+                },
+                {
+                    "instanceID": 44560
+                },
+                {
+                    "instanceID": 44496
+                },
+                {
+                    "instanceID": 44648
+                },
+                {
+                    "instanceID": 44508
+                },
+                {
+                    "instanceID": 44286
+                }
+            ]
+        },
+        {
+            "shop": 2,
+            "items": [
+                {
+                    "instanceID": 44462
+                },
+                {
+                    "instanceID": 44558
+                }
+            ]
+        },
+        {
+            "shop": 3,
+            "items": [
+                {
+                    "instanceID": 44484
+                },
+                {
+                    "instanceID": 44284
+                },
+                {
+                    "instanceID": 44432
+                },
+                {
+                    "instanceID": 44546
+                },
+                {
+                    "instanceID": 44568
+                }
+            ]
+        },
+        {
+            "shop": 4,
+            "items": [
+                {
+                    "instanceID": 44622
+                },
+                {
+                    "instanceID": 44440
+                },
+                {
+                    "instanceID": 44356
+                },
+                {
+                    "instanceID": 44344
+                },
+                {
+                    "instanceID": 44448
+                },
+                {
+                    "instanceID": 44404
+                },
+                {
+                    "instanceID": 44422
+                },
+                {
+                    "instanceID": 44502
+                },
+                {
+                    "instanceID": 44348
+                },
+                {
+                    "instanceID": 44620
+                },
+                {
+                    "instanceID": 44366
+                },
+                {
+                    "instanceID": 44416
+                }
+            ]
+        }
+    ]
+}

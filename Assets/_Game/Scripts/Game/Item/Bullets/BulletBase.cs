@@ -10,6 +10,8 @@ public class BulletBase : GameUnit
     float speed, rotateSpeed;
     [SerializeField]
     float defaultSize;
+    [SerializeField]
+    BulletSkin skin;
 
     protected Character source;
     bool isFired;
@@ -24,16 +26,18 @@ public class BulletBase : GameUnit
         set
         {
             _size = value;
-            transform.localScale = Vector3.one * _size;
+            TF.localScale = Vector3.one * _size;
         }
     }
 
-    public void Fire(Vector3 moveDir, Character source, float size)
+    public void Fire(Vector3 moveDir, Character source, float size, int modelId = -1)
     {
         isFired = true;
+        skin.ShowModel(modelId);
 
         this.source = source;
         this.moveDir = moveDir.normalized;
+        skin.transform.rotation = Quaternion.LookRotation(moveDir);
 
         timer = Time.time;
         Size = size;

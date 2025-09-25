@@ -49,7 +49,7 @@ public class AttackCore : BaseCore
         BulletBase bullet = HBPool.Spawn<BulletBase>(bulletType, shootPoint.position, Quaternion.identity);
         float size = _char.Core.DISPLAY.Scale;
         Vector3 dir = _char.Core.SENSOR.TargetDir;
-        bullet.Fire(dir, _char, size);
+        bullet.Fire(dir, _char, size, _char.WeaponId);
 
         _isAtkCooldown = true;
         timer = Time.time;

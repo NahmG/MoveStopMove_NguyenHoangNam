@@ -1071,32 +1071,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e51d9e18659e3c43b53e00e19d5cdef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  datas:
-  - name: hammer
-    model: {fileID: 1578102034927628761, guid: fef54c196d9178844ab8ff8d0f9d69f8, type: 3}
-    isLock: 0
-    cost: 0
-    description: 
-  - name: lolipop
-    model: {fileID: 6382177284561404750, guid: 9ba985fd56f2d2346884d6264195a591, type: 3}
-    isLock: 1
-    cost: 0
-    description: 
-  - name: axe
-    model: {fileID: -7988656454566710686, guid: 597323e0e6002f741b258acbf14890a1, type: 3}
-    isLock: 1
-    cost: 0
-    description: 
-  - name: battle axe
-    model: {fileID: -476449551137995200, guid: ff2d1e37ec6b3e242a9e57fd493b28d7, type: 3}
-    isLock: 1
-    cost: 0
-    description: 
-  - name: knife
-    model: {fileID: -2168389371568301598, guid: 9c420aabe69e16f4e9fc5bab2aa58480, type: 3}
-    isLock: 1
-    cost: 0
-    description: 
   weaponPoint: {fileID: 4341937446639633315}
 --- !u!1 &4879553813330298763
 GameObject:
@@ -1319,6 +1293,8 @@ GameObject:
   - component: {fileID: 3020112111794662339}
   - component: {fileID: 563369892311797521}
   - component: {fileID: 4744096134900510598}
+  - component: {fileID: 6823226931200562403}
+  - component: {fileID: 3943810169802533056}
   m_Layer: 5
   m_Name: EquipBtn
   m_TagString: Untagged
@@ -1442,9 +1418,62 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   button: {fileID: 563369892311797521}
   index: 0
-  hasComponent: 0
+  hasComponent: 1
   textButton: {fileID: 0}
-  buttonComponents: []
+  buttonComponents:
+  - {fileID: 6823226931200562403}
+  - {fileID: 3943810169802533056}
+--- !u!114 &6823226931200562403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5049812718899304491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cc4e14ea0740ac4faa86e18f4f4b7b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Data:
+  - Image: {fileID: 3020112111794662339}
+    Sprites:
+    - {fileID: 0}
+    - {fileID: 21300000, guid: 2545520b7e2e1e44882016922b6dd32f, type: 3}
+    - {fileID: 21300000, guid: c0b2b1261862a624192b6c91d0328c0d, type: 3}
+    - {fileID: 0}
+    RaycaseTargets: 00010100
+    Colors:
+    - {r: 0.33333334, g: 0.33333334, b: 0.33333334, a: 1}
+    - {r: 1, g: 1, b: 1, a: 1}
+    - {r: 1, g: 1, b: 1, a: 1}
+    - {r: 1, g: 1, b: 1, a: 1}
+    Types: 01000000010000000100000000000000
+    PreserveAspects: 00000001
+    Positions: []
+    Sizes: []
+--- !u!114 &3943810169802533056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5049812718899304491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c8986acc51f55b4f93b2f4637e9a781, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Data:
+  - Text: {fileID: 6917992515327066698}
+    Contents:
+    - 
+    - Equip
+    - Equipped
+    - 
+    Actives: 
+    Colors: []
+    Sizes: 
 --- !u!1 &5532325303472598581
 GameObject:
   m_ObjectHideFlags: 0

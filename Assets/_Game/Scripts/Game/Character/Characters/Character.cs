@@ -26,6 +26,7 @@ public class Character : GameUnit, ICharacter
 
     [HideInInspector]
     public bool IsUlti;
+    public virtual int WeaponId { get; protected set; }
 
     protected virtual void Awake()
     {
@@ -106,11 +107,11 @@ public class Character : GameUnit, ICharacter
     /// <param name="targetLevel">Target's current level</param>
     public virtual void OnLevelUp(float targetLevel)
     {
-        float mult = LevelToMultiplier(Stats.Level.Value);
-        int add = LevelToAddend(targetLevel);
-
         //level up
+        int add = LevelToAddend(targetLevel);
         Stats.Level.Plus(add);
+
+        float mult = LevelToMultiplier(Stats.Level.Value);
 
         //change atk range & scale
         Stats.AtkRange.Set(Stats.AtkRange.BaseValue * mult);

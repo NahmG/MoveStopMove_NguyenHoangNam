@@ -15,14 +15,23 @@ public class UIShopWeapon : UICanvas
     [SerializeField]
     WeaponDisplayComponent display;
 
+    Weapon currentWeapon;
+    PlayerData playerData;
+    PlayerEquipment playerEquip;
+
     void Awake()
     {
         closeBtn._OnClick += OnCloseBtnClick;
         leftBtn._OnClick += OnLeftRightBtnClick;
         rightBtn._OnClick += OnLeftRightBtnClick;
+        buyBtn._OnClick += OnBuyBtnClick;
+        equipBtn._OnClick += OnEquipBtnClick;
 
         display._OnWeaponSelect += OnWeaponSelect;
         display.Init();
+
+        playerData ??= DataManager.Ins.Get<PlayerData>();
+        playerEquip ??= GameplayManager.Ins.Player.Core.DISPLAY.Equipment as PlayerEquipment;
     }
 
     void OnDestroy()
@@ -30,6 +39,8 @@ public class UIShopWeapon : UICanvas
         closeBtn._OnClick -= OnCloseBtnClick;
         leftBtn._OnClick -= OnLeftRightBtnClick;
         rightBtn._OnClick -= OnLeftRightBtnClick;
+        buyBtn._OnClick -= OnBuyBtnClick;
+        equipBtn._OnClick -= OnEquipBtnClick;
 
         display._OnWeaponSelect -= OnWeaponSelect;
     }
@@ -61,12 +72,28 @@ public class UIShopWeapon : UICanvas
 
     void OnBuyBtnClick(int index)
     {
+        if (currentWeapon == null) return;
+        if (playerData.gold.Value < currentWeapon.cost) return;
 
+        playerData.gold.Plus(currentWeapon.cost);
+        currentWeapon.isLock = false;
+
+        UpdateBtnState(currentWeapon);
     }
 
     void OnEquipBtnClick(int index)
     {
+        if (currentWeapon == null) return;
+        if (currentWeapon.isLock) return;
 
+        if (currentWeapon.isEquip) return;
+
+        playerEquip.UnEquipOldItem(SHOP.WEAPON);
+        playerEquip.Equip(currentWeapon);
+        currentWeapon.isEquip = true;
+        playerEquip.Save();
+
+        equipBtn.SetState(UIButton.STATE.SELECTING);
     }
 
     void OnWatchAdsBtnClick(int index)
@@ -74,18 +101,30 @@ public class UIShopWeapon : UICanvas
 
     }
 
-    void OnWeaponSelect(WeaponData data)
+    void OnWeaponSelect(Weapon item)
     {
-        buyBtn.gameObject.SetActive(data.isLock);
-        equipBtn.gameObject.SetActive(!data.isLock);
-        lockText.gameObject.SetActive(data.isLock);
+        currentWeapon = item;
+        UpdateBtnState(item);
 
-        if (data.isLock)
+        if (item.isLock)
+            cost.text = item.cost.ToString();
+
+        description.text = item.description;
+        weaponName.text = item.equipName;
+    }
+
+    void UpdateBtnState(Item item)
+    {
+        buyBtn.gameObject.SetActive(item.isLock);
+        equipBtn.gameObject.SetActive(!item.isLock);
+        lockText.gameObject.SetActive(item.isLock);
+
+        if (!item.isLock)
         {
-            cost.text = data.cost.ToString();
+            if (item.isEquip)
+                equipBtn.SetState(UIButton.STATE.SELECTING);
+            else
+                equipBtn.SetState(UIButton.STATE.OPENING);
         }
-
-        description.text = data.description;
-        weaponName.text = data.name;
     }
 }

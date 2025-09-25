@@ -1,21 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class UIShopTab : UICanvasComponent
 {
-    public Action<ItemData> _OnItemSelect;
+    public Action<Skin> _OnItemSelect;
     [SerializeField] Transform content;
     [SerializeField] UIItemButton itemBtnPref;
-    [SerializeField] List<ItemData> itemDatas;
+    public SHOP type;
 
+    List<Skin> itemDatas;
     List<UIItemButton> itemBtns = new();
     int currentBtn = -1;
-
-    void Awake()
-    {
-
-    }
 
     void OnDestroy()
     {
@@ -27,6 +24,7 @@ public class UIShopTab : UICanvasComponent
 
     public void Initialize()
     {
+        itemDatas = DataManager.Ins.Get<ShopData>().GetItems<Skin>((int)type);
         for (int i = 0; i < itemDatas.Count; i++)
         {
             UIItemButton item = Instantiate(itemBtnPref, content);

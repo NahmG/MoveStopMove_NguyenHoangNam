@@ -1,6 +1,7 @@
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class UIShopSkin : UICanvas
@@ -28,21 +29,28 @@ public class UIShopSkin : UICanvas
             OpenTab(value);
         }
     }
+    Skin currentItem;
+    PlayerData playerData;
+    PlayerEquipment playerEquip;
 
     void Awake()
     {
+        playerData ??= DataManager.Ins.Get<PlayerData>();
+        playerEquip ??= GameplayManager.Ins.Player.Core.DISPLAY.Equipment as PlayerEquipment;
+
         currentTab = -1;
         for (int i = 0; i < tabBtns.Length; i++)
         {
             tabBtns[i]._OnClick += OnTabBtnClick;
         }
-        closeBtn._OnClick += OnCloseBtnClick;
-
         tabs.ForEach((x) =>
         {
             x._OnItemSelect += OnItemSelect;
             x.Initialize();
         });
+        closeBtn._OnClick += OnCloseBtnClick;
+        buyBtn._OnClick += OnBuyBtnClick;
+        equipBtn._OnClick += OnEquipBtnClick;
 
         CloseAllTab();
     }
@@ -54,6 +62,9 @@ public class UIShopSkin : UICanvas
             tabBtns[i]._OnClick -= OnTabBtnClick;
         }
         closeBtn._OnClick -= OnCloseBtnClick;
+        buyBtn._OnClick -= OnBuyBtnClick;
+        equipBtn._OnClick -= OnEquipBtnClick;
+
         tabs.ForEach(x => x._OnItemSelect -= OnItemSelect);
     }
 
@@ -74,6 +85,7 @@ public class UIShopSkin : UICanvas
 
     void OnTabBtnClick(int index)
     {
+        playerEquip.Load();
         OpenTab(index);
     }
 
@@ -81,6 +93,7 @@ public class UIShopSkin : UICanvas
     {
         Hide();
 
+        playerEquip.Load();
         GameplayManager.Ins.Player.ChangeState(STATE.IDLE);
         UIManager.Ins.OpenUI<UIMainMenu>();
     }
@@ -108,15 +121,61 @@ public class UIShopSkin : UICanvas
         }
     }
 
-    void OnItemSelect(ItemData data)
+    void OnItemSelect(Skin item)
     {
-        buyBtn.gameObject.SetActive(data.isLock);
-        equipBtn.gameObject.SetActive(!data.isLock);
+        currentItem = item;
+        UpdateBtnState(item);
 
-        if (data.isLock)
+        if (item.isLock)
+            cost.text = item.cost.ToString();
+
+        description.text = item.description;
+        playerEquip.Equip(item);
+    }
+
+    void OnBuyBtnClick(int index)
+    {
+        if (currentItem == null || !currentItem.isLock) return;
+
+        if (playerData.gold.Value >= currentItem.cost)
         {
-            cost.text = data.cost.ToString();
+            playerData.gold.Plus(-currentItem.cost);
+            currentItem.isLock = false;
+
+            tabs[currentTab].UpdateTab();
+            UpdateBtnState(currentItem);
         }
-        description.text = data.description;
+    }
+
+    void OnEquipBtnClick(int index)
+    {
+        if (currentItem == null || currentItem.isLock) return;
+
+        if (currentItem.isEquip)
+        {
+            playerEquip.UnEquip(currentItem);
+            playerEquip.Save();
+            currentItem.isEquip = false;
+        }
+        else
+        {
+            playerEquip.UnEquipOldItem(tabs[currentTab].type);
+            currentItem.isEquip = true;
+            playerEquip.Equip(currentItem);
+            playerEquip.Save();
+        }
+
+        UpdateBtnState(currentItem);
+    }
+
+    void UpdateBtnState(Item item)
+    {
+        buyBtn.gameObject.SetActive(item.isLock);
+        equipBtn.gameObject.SetActive(!item.isLock);
+
+        if (item.isEquip)
+            equipBtn.SetState(UIButton.STATE.SELECTING);
+        else
+            equipBtn.SetState(UIButton.STATE.OPENING);
     }
 }

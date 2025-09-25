@@ -6,10 +6,13 @@ using Random = UnityEngine.Random;
 
 public class Enemy : Character
 {
+    public override int WeaponId { get => base.WeaponId; protected set => base.WeaponId = value; }
+
     public override void OnInit(CharacterStats stats = null)
     {
         base.OnInit(stats);
         TurnOnIndicator(false);
+        WeaponId = Random.Range(0, DataManager.Ins.Get<EquipmentData>().weapons.Count);
     }
 
     public override void OnDespawn()
@@ -34,6 +37,6 @@ public class Enemy : Character
 
     public void SetUp()
     {
-        //TODO: set random skin or smthg
+        //TODO: set random skin or smthg'
     }
 }

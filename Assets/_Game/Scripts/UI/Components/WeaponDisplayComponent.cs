@@ -4,25 +4,28 @@ using UnityEngine;
 
 public class WeaponDisplayComponent : MonoBehaviour
 {
-    public Action<WeaponData> _OnWeaponSelect;
-    public List<WeaponData> datas;
+    public Action<Weapon> _OnWeaponSelect;
 
     [SerializeField]
     Transform weaponPoint;
 
+    List<Weapon> datas;
+    List<GameObject> models;
     int currentIndex = -1;
-    public int CurrentIndex => currentIndex;
-    WeaponModel currentModel;
+    GameObject currentModel;
 
     public void Init()
     {
         currentIndex = -1;
         currentModel = null;
+
+        datas = DataManager.Ins.Get<ShopData>().GetItems<Weapon>((int)SHOP.WEAPON);
+        models = DataManager.Ins.Get<EquipmentData>().weapons;
     }
 
     public void ShowNextWeapon()
     {
-        if (currentIndex >= datas.Count - 1) return;
+        if (currentIndex >= models.Count - 1) return;
         ShowWeapon(currentIndex + 1);
     }
 
@@ -35,29 +38,15 @@ public class WeaponDisplayComponent : MonoBehaviour
     public void ShowWeapon(int index)
     {
         if (currentIndex == index) return;
-
         if (currentIndex >= 0)
         {
-            Destroy(currentModel.gameObject);
+            Destroy(currentModel);
         }
 
         currentIndex = index;
-        currentModel = Instantiate(datas[currentIndex].model, weaponPoint);
+        GameObject pref = models[currentIndex];
+        currentModel = Instantiate(pref, weaponPoint);
+
         _OnWeaponSelect?.Invoke(datas[currentIndex]);
     }
-
-    public WeaponData GetWeaponData(int index)
-    {
-        return datas[index];
-    }
-}
-
-[Serializable]
-public class WeaponData
-{
-    public string name;
-    public WeaponModel model;
-    public bool isLock;
-    public int cost;
-    public string description;
 }

@@ -8,9 +8,9 @@ public class UIItemButton : UIButton
     [SerializeField] GameObject frameSelect;
     [SerializeField] GameObject itemLock;
     [SerializeField] Image itemIcon;
-    ItemData data;
+    Item data;
 
-    public void Init(int index, ItemData data)
+    public void Init(int index, Item data)
     {
         this.data = data;
         this.index = index;
@@ -33,13 +33,4 @@ public class UIItemButton : UIButton
         SetState(STATE.OPENING);
         frameSelect.SetActive(false);
     }
-}
-
-[Serializable]
-public class ItemData
-{
-    public Sprite icon;
-    public bool isLock;
-    public int cost;
-    public string description;
 }

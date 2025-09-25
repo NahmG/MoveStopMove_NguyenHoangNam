@@ -6,6 +6,23 @@ public class Player : Character
 {
     [SerializeField]
     Transform rangeImg;
+    PlayerData playerData;
+    public PlayerData PlayerData
+    {
+        get
+        {
+            if (playerData == null)
+            {
+                playerData = DataManager.Ins.Get<PlayerData>();
+            }
+            return playerData;
+        }
+    }
+
+    public override int WeaponId
+    {
+        get => PlayerData.weaponId;
+    }
 
     protected override void Awake()
     {
@@ -41,8 +58,8 @@ public class Player : Character
         base.OnLevelUp(targetLevel);
 
         float mult = LevelToMultiplier(Stats.Level.Value);
-
         //change camera position
         GameplayManager.Ins.mainCam.Scale(mult);
+        Debug.Log("Scale cam: " + mult);
     }
 }

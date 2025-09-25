@@ -89,7 +89,7 @@ public class EnemySpawn : Singleton<EnemySpawn>
             if (IsValidPos(spawnPos))
                 return spawnPos;
 
-        } while (attempts < 10000);
+        } while (attempts < 1000);
 
         Debug.LogWarning("No valid spawn position found!");
         return spawnPos;
