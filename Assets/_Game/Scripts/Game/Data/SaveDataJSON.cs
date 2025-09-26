@@ -8,7 +8,6 @@ public class SaveDataJSON : MonoBehaviour
 {
     public ShopData shopData;
 
-    [Button]
     public void SaveData()
     {
         string json = JsonUtility.ToJson(shopData);
@@ -18,7 +17,6 @@ public class SaveDataJSON : MonoBehaviour
         writer.Write(json);
     }
 
-    [Button]
     public void LoadData()
     {
         string json = string.Empty;

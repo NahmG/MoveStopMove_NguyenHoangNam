@@ -29,11 +29,14 @@ namespace Core.Display
             }
         }
 
+        public Color Color { get; private set; }
+
         public override void Initialize(CoreSystem core)
         {
             base.Initialize(core);
             Scale = 1;
             Equipment?.Initialize();
+            Color = Equipment?.MainColor == Color.white ? Color.black : Equipment.MainColor;
         }
 
         public void SetSkinRotation(Quaternion rotation, bool isLocal)

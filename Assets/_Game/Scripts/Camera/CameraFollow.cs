@@ -13,6 +13,7 @@ public class CameraFollow : SerializedMonoBehaviour
 
     Transform target;
     CameraData currentCam;
+    public Camera cam;
 
     float mult = 1;
 

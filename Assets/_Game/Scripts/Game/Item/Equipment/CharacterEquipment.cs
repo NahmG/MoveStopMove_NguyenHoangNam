@@ -13,9 +13,12 @@ public class CharacterEquipment : SerializedMonoBehaviour
     protected int[] currentSet;
     protected int currentWeapon;
 
+    public Color MainColor { get; private set; }
+
     public virtual void Initialize()
     {
         equipPart.ForEach(x => x.Initialize());
+        MainColor = equipPart[0] is RenderComponent rend ? rend.defaultMat.color : Color.black;
     }
 
     public virtual void Equip(EQUIP Id, int index)

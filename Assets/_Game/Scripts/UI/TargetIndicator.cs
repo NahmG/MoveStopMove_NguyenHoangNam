@@ -1,44 +1,43 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TargetIndicator : GameUnit
 {
-    public TMP_Text text;
+    [Header("UI Elements")]
+    [SerializeField] TMP_Text text;
+    [SerializeField] Image[] images;
+    [SerializeField] GameObject offScreenIndicator;
+    [SerializeField] RectTransform rectTransform;
 
-    public Image offTarIndImage;
-    public Image TargetIndicatorImage;
-    public GameObject OffScreenTargetIndicator;
-
-    public float OutOfSightOffset = 20f;
-    private float outOfSightOffest { get { return OutOfSightOffset; } }
-
-    public bool outOfSight { get; private set; }
+    [Header("Settings")]
+    [SerializeField] float edgeOffset = 20f;
+    [SerializeField] float targetOffsetY = 20f;
 
     private Character target;
     private Camera mainCamera;
     private RectTransform canvasRect;
 
-    [SerializeField] RectTransform rectTransform;
+    public bool OutOfSight { get; private set; }
     public Character Target => target;
 
-    private void LateUpdate()
+    public void UpdateIndicator()
     {
-        SetIndicatorPosition();
-        SetLevelText();
+        if (target == null || mainCamera == null) return;
+        UpdateState();
+        text.text = target.Stats.Level.Value.ToString();
     }
 
-    public void OnInit(Character target, Camera mainCamera, Canvas canvas)
+    public void OnInit(Character target, Camera camera, Canvas canvas, Color color)
     {
         this.target = target;
-        this.mainCamera = mainCamera;
+        mainCamera = camera;
         canvasRect = canvas.GetComponent<RectTransform>();
-        // TargetIndicatorImage.color = offTarIndImage.color = target.color;
 
-        SetIndicatorPosition();
+        foreach (var img in images)
+        {
+            img.color = color;
+        }
     }
 
     public void OnDespawn()
@@ -48,115 +47,63 @@ public class TargetIndicator : GameUnit
         canvasRect = null;
     }
 
-    private void SetLevelText()
+    private void UpdateState()
     {
-        text.text = target.Stats.Level.Value.ToString();
-    }
+        Vector3 screenPos = mainCamera.WorldToScreenPoint(
+            target.transform.position + 1.3f * target.transform.localScale.y * Vector3.up
+        );
 
-    protected void SetIndicatorPosition()
-    {
-        //Get the position of the target in relation to the screenSpace 
-        Vector3 indicatorPosition = mainCamera.WorldToScreenPoint(target.transform.position + new Vector3(0, 1.3f * target.transform.localScale.y, 0));
+        if (screenPos.z < 0f) screenPos *= -1f; // behind camera
 
-        //In case the target is both in front of the camera and within the bounds of its frustrum
-        if (indicatorPosition.z >= 0f & indicatorPosition.x <= canvasRect.rect.width * canvasRect.localScale.x
-         & indicatorPosition.y <= canvasRect.rect.height * canvasRect.localScale.x & indicatorPosition.x >= 0f & indicatorPosition.y >= 0f)
+        bool inView = screenPos.x >= 0 && screenPos.x <= canvasRect.rect.width &&
+                      screenPos.y >= 0 && screenPos.y <= canvasRect.rect.height &&
+                      screenPos.z >= 0;
+
+        if (inView)
         {
-            //Set z to zero since it's not needed and only causes issues (too far away from Camera to be shown!)
-            indicatorPosition.z = 0f;
-            //Target is in sight, change indicator parts around accordingly
-            targetOutOfSight(false, indicatorPosition);
-        }
-
-        //In case the target is in front of the ship, but out of sight
-        else if (indicatorPosition.z >= 0f)
-        {
-            //Set indicatorposition and set targetIndicator to outOfSight form.
-            indicatorPosition = OutOfRangeindicatorPositionB(indicatorPosition);
-            targetOutOfSight(true, indicatorPosition);
+            OutOfSight = false;
+            ToggleOffScreen(false);
         }
         else
         {
-            //Invert indicatorPosition! Otherwise the indicator's positioning will invert if the target is on the backside of the camera!
-            indicatorPosition *= -1f;
-
-            //Set indicatorposition and set targetIndicator to outOfSight form.
-            indicatorPosition = OutOfRangeindicatorPositionB(indicatorPosition);
-            targetOutOfSight(true, indicatorPosition);
+            OutOfSight = true;
+            screenPos = ClampToScreenEdge(screenPos);
+            ToggleOffScreen(true, screenPos);
         }
 
-        //Set the position of the indicator
-        rectTransform.position = indicatorPosition;
-
+        screenPos += Vector3.up * targetOffsetY;
+        screenPos.z = 0;
+        rectTransform.position = screenPos;
     }
 
-    private Vector3 OutOfRangeindicatorPositionB(Vector3 indicatorPosition)
+    private Vector3 ClampToScreenEdge(Vector3 pos)
     {
-        //Set indicatorPosition.z to 0f; We don't need that and it'll actually cause issues if it's outside the camera range (which easily happens in my case)
-        indicatorPosition.z = 0f;
+        pos.z = 0f;
+        Vector3 center = canvasRect.rect.size / 2f;
+        Vector3 dir = (pos - center).normalized;
 
-        //Calculate Center of Canvas and subtract from the indicator position to have indicatorCoordinates from the Canvas Center instead the bottom left!
-        Vector3 canvasCenter = new Vector3(canvasRect.rect.width / 2f, canvasRect.rect.height / 2f, 0f) * canvasRect.localScale.x;
-        indicatorPosition -= canvasCenter;
+        float x = center.x - edgeOffset;
+        float y = center.y - edgeOffset;
+        float slope = dir.y / dir.x;
 
-        //Calculate if Vector to target intersects (first) with y border of canvas rect or if Vector intersects (first) with x border:
-        //This is required to see which border needs to be set to the max value and at which border the indicator needs to be moved (up & down or left & right)
-        float divX = (canvasRect.rect.width / 2f - outOfSightOffest) / Mathf.Abs(indicatorPosition.x);
-        float divY = (canvasRect.rect.height / 2f - outOfSightOffest) / Mathf.Abs(indicatorPosition.y);
-
-        //In case it intersects with x border first, put the x-one to the border and adjust the y-one accordingly (Trigonometry)
-        if (divX < divY)
-        {
-            float angle = Vector3.SignedAngle(Vector3.right, indicatorPosition, Vector3.forward);
-            indicatorPosition.x = Mathf.Sign(indicatorPosition.x) * (canvasRect.rect.width * 0.5f - outOfSightOffest) * canvasRect.localScale.x;
-            indicatorPosition.y = Mathf.Tan(Mathf.Deg2Rad * angle) * indicatorPosition.x;
-        }
-
-        //In case it intersects with y border first, put the y-one to the border and adjust the x-one accordingly (Trigonometry)
+        if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
+            pos = new Vector3(Mathf.Sign(dir.x) * x, slope * Mathf.Sign(dir.x) * x, 0);
         else
-        {
-            float angle = Vector3.SignedAngle(Vector3.up, indicatorPosition, Vector3.forward);
+            pos = new Vector3(1f / slope * Mathf.Sign(dir.y) * y, Mathf.Sign(dir.y) * y, 0);
 
-            indicatorPosition.y = Mathf.Sign(indicatorPosition.y) * (canvasRect.rect.height / 2f - outOfSightOffest) * canvasRect.localScale.y;
-            indicatorPosition.x = -Mathf.Tan(Mathf.Deg2Rad * angle) * indicatorPosition.y;
-        }
-
-        //Change the indicator Position back to the actual rectTransform coordinate system and return indicatorPosition
-        indicatorPosition += canvasCenter;
-        return indicatorPosition;
+        return pos + center;
     }
 
-    private void targetOutOfSight(bool oos, Vector3 indicatorPosition)
+    private void ToggleOffScreen(bool state, Vector3? pos = null)
     {
-        outOfSight = oos;
-        //In Case the indicator is OutOfSight
-        if (oos)
+        if (offScreenIndicator.activeSelf != state)
+            offScreenIndicator.SetActive(state);
+
+        if (state && pos.HasValue)
         {
-            //Activate and Deactivate some stuff
-            if (OffScreenTargetIndicator.gameObject.activeSelf == false) OffScreenTargetIndicator.gameObject.SetActive(true);
-            //if (TargetIndicatorImage.isActiveAndEnabled == true) TargetIndicatorImage.enabled = true;
-
-            //Set the rotation of the OutOfSight direction indicator
-            OffScreenTargetIndicator.transform.rotation = Quaternion.Euler(rotationOutOfSightTargetindicator(indicatorPosition));
+            Vector3 center = canvasRect.rect.size / 2f;
+            float angle = Vector3.SignedAngle(Vector3.up, pos.Value - center, Vector3.forward);
+            offScreenIndicator.transform.rotation = Quaternion.Euler(0, 0, angle);
         }
-
-        //In case that the indicator is InSight, turn on the inSight stuff and turn off the OOS stuff.
-        else
-        {
-            if (OffScreenTargetIndicator.gameObject.activeSelf == true) OffScreenTargetIndicator.gameObject.SetActive(false);
-            //if (TargetIndicatorImage.isActiveAndEnabled == false) TargetIndicatorImage.enabled = true;
-        }
-    }
-
-    private Vector3 rotationOutOfSightTargetindicator(Vector3 indicatorPosition)
-    {
-        //Calculate the canvasCenter
-        Vector3 canvasCenter = new Vector3(canvasRect.rect.width / 2f, canvasRect.rect.height / 2f, 0f) * canvasRect.localScale.x;
-
-        //Calculate the signedAngle between the position of the indicator and the Direction up.
-        float angle = Vector3.SignedAngle(Vector3.up, indicatorPosition - canvasCenter, Vector3.forward);
-
-        //return the angle as a rotation Vector
-        return new Vector3(0f, 0f, angle);
     }
 }

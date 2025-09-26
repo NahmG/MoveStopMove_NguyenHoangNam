@@ -14,11 +14,14 @@ public class GameplayManager : Singleton<GameplayManager>
 
     List<Character> characters = new();
     bool isGameEnd;
+    UIGameplay uiGameplay;
 
     void Start()
     {
         LevelManager.Ins.OnInit();
         UIManager.Ins.OpenUI<UIMainMenu>();
+        uiGameplay = UIManager.Ins.GetUI<UIGameplay>();
+        uiGameplay.Close();
 
         mainCam.ChangeCamera(CAMERA_TYPE.MENU);
 
@@ -50,6 +53,7 @@ public class GameplayManager : Singleton<GameplayManager>
         //set up character
         EnemySpawn.Ins.OnInit();
         player.OnInit();
+        uiGameplay.SpawnIndicator(player);
 
         characters.Clear();
         characters.Add(Player);
@@ -65,11 +69,11 @@ public class GameplayManager : Singleton<GameplayManager>
         }
 
         EnemySpawn.Ins.OnDespawn();
+        uiGameplay.DespawnAllIndicator();
     }
 
     public void OnGameEnd()
     {
         isGameEnd = true;
-
     }
 }

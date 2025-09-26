@@ -626,6 +626,8 @@ MonoBehaviour:
   rectTf: {fileID: 3754776019463974028}
   enemyCountText: {fileID: 5172153193802332007}
   settingBtn: {fileID: 6357704937238786428}
+  canvas: {fileID: 1160331669694000939}
+  indicatorPref: {fileID: 6625363308638056437, guid: ed31126ab01a6ec4f8fa4082de2fd93c, type: 3}
 --- !u!1 &7976192659083005209
 GameObject:
   m_ObjectHideFlags: 0

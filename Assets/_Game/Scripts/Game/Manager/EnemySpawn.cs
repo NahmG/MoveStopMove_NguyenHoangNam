@@ -1,9 +1,13 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class EnemySpawn : Singleton<EnemySpawn>
 {
+    public Action<Enemy> _OnEnemySpawn;
+    public Action<Enemy> _OnEnemyDespawn;
+
     [SerializeField]
     int maxEnemy;
     [SerializeField]
@@ -43,6 +47,8 @@ public class EnemySpawn : Singleton<EnemySpawn>
 
         Enemies.Add(e);
         availableEnemy--;
+
+        _OnEnemySpawn?.Invoke(e);
     }
 
     void Despawn(Enemy enemy)
@@ -52,6 +58,8 @@ public class EnemySpawn : Singleton<EnemySpawn>
 
         if (Enemies.Contains(enemy))
             Enemies.Remove(enemy);
+
+        _OnEnemyDespawn?.Invoke(enemy);
     }
 
     void DespawnAllEnemy()
