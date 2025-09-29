@@ -36,12 +36,12 @@ namespace Core.Navigation
         {
             isRunning = false;
             EnableJoystick(false);
-
         }
 
         void EnableJoystick(bool isOn)
         {
             stick.gameObject.SetActive(isOn);
+            stick.Reset();
         }
     }
 }

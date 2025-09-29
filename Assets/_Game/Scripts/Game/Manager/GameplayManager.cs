@@ -8,30 +8,32 @@ public class GameplayManager : Singleton<GameplayManager>
     [SerializeField]
     Player player;
     public Player Player => player;
-    [SerializeField]
-    Level currentLevel;
 
+    Level currentLevel;
     UIGameplay uiGameplay;
-    List<Character> characters = new();
     bool isGameEnd;
     bool isRevive;
 
     void Start()
     {
         LevelManager.Ins.OnInit();
-        UIManager.Ins.OpenUI<UIMainMenu>();
         uiGameplay = UIManager.Ins.GetUI<UIGameplay>();
         uiGameplay.Close();
 
-        mainCam.ChangeCamera(CAMERA_TYPE.MENU);
+        LoadGame();
+    }
 
+    public void LoadGame()
+    {
+        UIManager.Ins.OpenUI<UIMainMenu>();
         ReconstructLevel();
     }
 
     public void StartLevel()
     {
-        characters.ForEach(x => x.Run());
-        mainCam.ChangeCamera(CAMERA_TYPE.GAME_PLAY);
+        player.Run();
+        EnemySpawn.Ins.Run();
+        uiGameplay.Open();
     }
 
     public void ReconstructLevel()
@@ -53,11 +55,8 @@ public class GameplayManager : Singleton<GameplayManager>
         //set up character
         EnemySpawn.Ins.OnInit();
         player.OnInit();
-        uiGameplay.SpawnIndicator(player);
 
-        characters.Clear();
-        characters.Add(Player);
-        characters.AddRange(EnemySpawn.Ins.Enemies);
+        uiGameplay?.SpawnIndicator(player);
     }
 
     void DestructLevel()
@@ -68,21 +67,42 @@ public class GameplayManager : Singleton<GameplayManager>
             currentLevel = null;
         }
 
+
         EnemySpawn.Ins.OnDespawn();
-        uiGameplay.DespawnAllIndicator();
+        uiGameplay?.DespawnAllIndicator();
+
+        HBPool.Collect(PoolType.BULLET);
     }
 
-    public void OnGameEnd()
+    public void RevivePlayer()
+    {
+        player.OnRevive();
+        uiGameplay.Open();
+    }
+
+    public void Pause(bool isPause)
+    {
+
+    }
+
+    public void OnGameEnd(bool isWin)
     {
         isGameEnd = true;
-        if (!isRevive)
+        UIManager.Ins.CloseAll();
+        if (isWin)
         {
-            isRevive = true;
-            UIManager.Ins.OpenUI<UIRevive>();
+            UIManager.Ins.OpenUI<UIWin>();
         }
         else
         {
-            UIManager.Ins.OpenUI<UILose>();
+            if (!isRevive)
+            {
+                isRevive = true;
+                UIManager.Ins.OpenUI<UIRevive>();
+            }
+            else
+                UIManager.Ins.OpenUI<UILose>();
         }
     }
+
 }

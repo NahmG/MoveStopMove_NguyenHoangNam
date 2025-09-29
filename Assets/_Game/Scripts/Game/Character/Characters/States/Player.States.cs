@@ -6,12 +6,35 @@ public class PlayerIdleState : IdleState
     public PlayerIdleState(CoreSystem core) : base(core)
     {
     }
+
+    public override void Update()
+    {
+        base.Update();
+
+        if (Core.NAVIGATION.MoveDirection.sqrMagnitude > .01f)
+        {
+            ChangeState(STATE.MOVE);
+        }
+        else if (Target != null && !IsAttackCooldown)
+        {
+            ChangeState(STATE.ATTACK);
+        }
+    }
 }
 
 public class PlayerMoveState : MoveState
 {
     public PlayerMoveState(CoreSystem core) : base(core)
     {
+    }
+
+    public override void Update()
+    {
+        base.Update();
+        if (Core.NAVIGATION.MoveDirection.sqrMagnitude < .01f)
+        {
+            ChangeState(STATE.IDLE);
+        }
     }
 
     public override void FixedUpdate()
@@ -45,6 +68,15 @@ public class PlayerAttackState : AttackState
     {
     }
 
+    public override void Update()
+    {
+        if (Core.NAVIGATION.MoveDirection.sqrMagnitude > .01f)
+        {
+            ChangeState(STATE.MOVE);
+        }
+        base.Update();
+    }
+
     protected override void RotateTowardTarget()
     {
         base.RotateTowardTarget();
@@ -58,6 +90,12 @@ public class PlayerDeadState : DeadState
 {
     public PlayerDeadState(CoreSystem core) : base(core)
     {
+    }
+
+    public override void OnDeath()
+    {
+        base.OnDeath();
+        Core.isInit = false;
     }
 }
 

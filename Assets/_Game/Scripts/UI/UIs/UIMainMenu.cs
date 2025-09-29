@@ -32,7 +32,6 @@ public class UIMainMenu : UICanvas
     public override void Open(object param = null)
     {
         base.Open(param);
-
         GameplayManager.Ins.mainCam.ChangeCamera(CAMERA_TYPE.MENU);
     }
 

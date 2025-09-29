@@ -58,11 +58,3 @@ public class ItemList
     public List<Item> items = new();
 }
 
-public enum SHOP
-{
-    HAT = 0,
-    PANT = 1,
-    SHIELD = 2,
-    SET_SKIN = 3,
-    WEAPON = 4,
-}

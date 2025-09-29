@@ -12,7 +12,6 @@ public class CharacterEquipment : SerializedMonoBehaviour
 
     protected int[] currentSet = new int[6];
     protected int currentWeapon;
-
     protected int[] skinId = new int[5];
 
     public Color MainColor { get; private set; }
@@ -90,17 +89,5 @@ public class CharacterEquipment : SerializedMonoBehaviour
             UnEquip(EQUIP.WEAPON);
         }
     }
-
 }
 
-public enum EQUIP
-{
-    NONE = -1,
-    BODY = 0,
-    HAT = 1,
-    PANT = 2,
-    LEFT_HAND = 3,
-    TAIL = 4,
-    WING = 5,
-    WEAPON = 6,
-}

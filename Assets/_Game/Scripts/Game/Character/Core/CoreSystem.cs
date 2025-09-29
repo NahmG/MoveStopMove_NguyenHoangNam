@@ -47,7 +47,7 @@ namespace Core
         #endregion
 
         public StateMachine StateMachine { get; private set; }
-        bool isInit;
+        public bool isInit;
 
         public virtual void Initialize(CharacterStats stats)
         {
@@ -59,7 +59,6 @@ namespace Core
             }
 
             StateMachine = new StateMachine();
-
             isInit = true;
         }
 
@@ -73,6 +72,7 @@ namespace Core
             {
                 coreDict[id].UpdateData();
             }
+            StateMachine.Update();
         }
 
         public virtual void FixedUpdate()
@@ -83,12 +83,12 @@ namespace Core
             {
                 coreDict[id].FixedUpdateData();
             }
+            StateMachine.FixedUpdate();
         }
 
-        public void OnDespawn()
+        public void OnDeath()
         {
             StateMachine.ChangeState(STATE.DEAD);
-            isInit = false;
         }
 
         T GetCore<T>(CORE_TYPE id, ref T cache) where T : BaseCore

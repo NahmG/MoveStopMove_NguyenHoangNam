@@ -13,6 +13,8 @@ public class Enemy : Character
         base.OnInit(stats);
         TurnOnIndicator(false);
         WeaponId = Random.Range(0, DataManager.Ins.Get<EquipmentData>().weapons.Count);
+
+        StartNavigation(false);
     }
 
     public override void OnDespawn()

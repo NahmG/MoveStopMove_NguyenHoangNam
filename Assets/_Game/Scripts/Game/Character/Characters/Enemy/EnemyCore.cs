@@ -8,10 +8,11 @@ namespace Core
         {
             base.Initialize(stats);
 
-            // stateMachine.IsDebug = true;
+            // StateMachine.IsDebug = true;
 
             StateMachine.AddState(STATE.IDLE, new EnemyIdleState(this));
             StateMachine.AddState(STATE.MOVE, new EnemyMoveState(this));
+            StateMachine.AddState(STATE.TARGET_DETECTED, new EnemyTargetDetected(this));
             StateMachine.AddState(STATE.ATTACK, new EnemyAttackState(this));
             StateMachine.AddState(STATE.DEAD, new EnemyDeadState(this));
         }
@@ -20,18 +21,6 @@ namespace Core
         {
             base.Run();
             StateMachine.Start(STATE.IDLE);
-        }
-
-        public override void UpdateData()
-        {
-            base.UpdateData();
-            StateMachine.Update();
-        }
-
-        public override void FixedUpdate()
-        {
-            base.FixedUpdate();
-            StateMachine.FixedUpdate();
         }
     }
 }

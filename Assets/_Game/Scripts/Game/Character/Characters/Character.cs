@@ -13,7 +13,7 @@ public class Character : GameUnit, ICharacter
     public bool IsDead => Stats.HP.Value <= 0;
 
     [HideInInspector]
-    public bool IsUlti;
+    public bool IsUlti = false;
     public virtual int WeaponId { get; protected set; }
 
     protected virtual void Awake()
@@ -55,7 +55,7 @@ public class Character : GameUnit, ICharacter
 
     public virtual void OnDeath()
     {
-        core.OnDespawn();
+        core.OnDeath();
     }
 
     protected virtual void Update()

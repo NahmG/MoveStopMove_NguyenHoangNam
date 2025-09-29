@@ -94,6 +94,11 @@ public static class HBPool
         poolInstance[gameUnit.poolType].Despawn(gameUnit);
     }
 
+    public static void Collect(PoolType poolType)
+    {
+        poolInstance[poolType].Collect();
+    }
+
     public static void CollectAll()
     {
         foreach (var pool in poolInstance)

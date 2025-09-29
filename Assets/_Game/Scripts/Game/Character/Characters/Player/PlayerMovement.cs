@@ -8,6 +8,12 @@ namespace Core.Movement
         Transform TF;
         Vector3 velocity;
 
+        public override void Initialize(CoreSystem core)
+        {
+            base.Initialize(core);
+            velocity = Vector3.zero;
+        }
+
         public override void UpdateData()
         {
             base.UpdateData();

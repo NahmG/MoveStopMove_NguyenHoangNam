@@ -20,6 +20,13 @@ public class AttackCore : BaseCore
 
     protected bool _isAtkCooldown;
     public bool IsAtkCooldown => _isAtkCooldown;
+    bool _isAttack;
+    public bool IsAttack
+    {
+        get => _isAttack;
+        set => _isAttack = value;
+    }
+
     float timer;
 
     void Awake()
@@ -36,6 +43,7 @@ public class AttackCore : BaseCore
     {
         base.Initialize(core);
         _isAtkCooldown = false;
+        _isAttack = false;
     }
 
     public override void UpdateData()

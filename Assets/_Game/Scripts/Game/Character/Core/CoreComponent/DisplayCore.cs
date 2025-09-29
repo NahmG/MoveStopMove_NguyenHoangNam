@@ -39,17 +39,23 @@ namespace Core.Display
             Color = Equipment?.MainColor == Color.white ? Color.black : Equipment.MainColor;
         }
 
-        public void SetSkinRotation(Quaternion rotation, bool isLocal)
+        public void SetSkinRotation(Vector3 vector, bool isLocal)
+        {
+            Quaternion qua = Quaternion.Euler(vector);
+            SetSkinRotation(qua, isLocal);
+        }
+
+        public void SetSkinRotation(Quaternion quaternion, bool isLocal)
         {
             if (isLocal)
             {
-                skinTf.localRotation = rotation;
-                sensorTf.localRotation = rotation;
+                skinTf.localRotation = quaternion;
+                sensorTf.localRotation = quaternion;
             }
             else
             {
-                skinTf.rotation = rotation;
-                sensorTf.localRotation = rotation;
+                skinTf.rotation = quaternion;
+                sensorTf.localRotation = quaternion;
             }
         }
 

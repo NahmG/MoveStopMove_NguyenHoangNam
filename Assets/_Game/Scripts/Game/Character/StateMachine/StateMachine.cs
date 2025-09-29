@@ -51,6 +51,7 @@ public class StateMachine
             _states.Remove(id);
         }
     }
+
     public void ChangeState(STATE id)
     {
         if (IsDebug)
@@ -66,10 +67,12 @@ public class StateMachine
         currentState = _states[id];
         currentState?.Enter();
     }
+
     public void Update()
     {
         currentState?.Update();
     }
+
     public void FixedUpdate()
     {
         currentState?.FixedUpdate();

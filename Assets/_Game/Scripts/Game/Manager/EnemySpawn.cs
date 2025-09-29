@@ -33,9 +33,16 @@ public class EnemySpawn : Singleton<EnemySpawn>
         }
     }
 
+    public void Run()
+    {
+        Enemies.ForEach(x => x.Run());
+    }
+
     public void OnDespawn()
     {
         DespawnAllEnemy();
+        _enemyCount = 0;
+        availableEnemy = 0;
     }
     #endregion
 

@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public enum STATE
 {
@@ -6,6 +7,7 @@ public enum STATE
     IDLE,
     MOVE,
     IN_AIR,
+    TARGET_DETECTED,
     ATTACK,
     ULTI,
     DEAD,

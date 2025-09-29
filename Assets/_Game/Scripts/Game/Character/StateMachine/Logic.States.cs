@@ -8,21 +8,45 @@ public abstract class BaseLogicState : BaseState
 {
     protected CoreSystem Core;
     protected CharacterStats Stats;
+
+    protected bool isAnimFinish;
+    protected float animTime;
+
+    float timer;
+
     public BaseLogicState(CoreSystem core)
     {
         Core = core;
     }
-}
 
-public abstract class GroundedState : BaseLogicState
-{
-    protected GroundedState(CoreSystem core) : base(core)
+    public override void Enter()
     {
+        base.Enter();
+        timer = Time.time;
+        isAnimFinish = false;
+    }
+
+    public override void Update()
+    {
+        if (Time.time >= timer + animTime)
+        {
+            isAnimFinish = true;
+        }
     }
 
     protected float GetRandomTime(float min, float max)
     {
         return Random.Range(min, max);
+    }
+}
+
+public abstract class GroundedState : BaseLogicState
+{
+    protected bool IsAttackCooldown => Core.ATTACK.IsAtkCooldown;
+    protected Character Target => Core.SENSOR.Target;
+
+    protected GroundedState(CoreSystem core) : base(core)
+    {
     }
 }
 
@@ -47,15 +71,6 @@ public abstract class IdleState : GroundedState
     public override void Update()
     {
         base.Update();
-        if (Core.NAVIGATION.MoveDirection.sqrMagnitude > .01f)
-        {
-            ChangeState(STATE.MOVE);
-        }
-
-        else if (Core.SENSOR.Target != null && !Core.ATTACK.IsAtkCooldown)
-        {
-            ChangeState(STATE.ATTACK);
-        }
     }
 
     public override void FixedUpdate()
@@ -80,16 +95,14 @@ public abstract class MoveState : GroundedState
 
     public override void Update()
     {
-        if (Core.NAVIGATION.MoveDirection.sqrMagnitude < .01f)
-        {
-            ChangeState(STATE.IDLE);
-        }
+        base.Update();
     }
 }
 
 public abstract class InAirState : BaseLogicState
 {
     public override STATE Id => STATE.IN_AIR;
+
     protected InAirState(CoreSystem core) : base(core)
     {
     }
@@ -116,18 +129,19 @@ public abstract class AttackState : BaseLogicState
     public override STATE Id => STATE.ATTACK;
     protected Character _char;
 
-    protected float timer;
-
     protected AttackState(CoreSystem core) : base(core)
     {
         _char = core.CHARACTER;
+        animTime = Core.DISPLAY.AtkDuration;
     }
 
     public override void Enter()
     {
         base.Enter();
-        timer = Time.time;
+        Core.MOVEMENT.StopMovement();
         RotateTowardTarget();
+
+        Core.ATTACK.IsAttack = true;
 
         if (_char.IsUlti)
         {
@@ -138,15 +152,17 @@ public abstract class AttackState : BaseLogicState
 
     public override void Update()
     {
-        if (Core.NAVIGATION.MoveDirection.sqrMagnitude > .01f)
-        {
-            ChangeState(STATE.MOVE);
-        }
-
-        if (Time.time >= timer + Core.DISPLAY.AtkDuration)
+        base.Update();
+        if (isAnimFinish)
         {
             ChangeState(STATE.IDLE);
         }
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        Core.ATTACK.IsAttack = false;
     }
 
     protected virtual void RotateTowardTarget() { }
@@ -156,25 +172,32 @@ public abstract class DeadState : BaseLogicState
 {
     public override STATE Id => STATE.DEAD;
     Character _char;
-    float timer;
 
     protected DeadState(CoreSystem core) : base(core)
     {
         _char = core.CHARACTER;
+        animTime = Core.DISPLAY.DeadDuration;
     }
 
     public override void Enter()
     {
+        base.Enter();
         Core.DISPLAY.ChangeAnim(CONSTANTS.DEAD_ANIM_NAME);
-        timer = Time.time;
-
         Core.MOVEMENT.StopMovement();
     }
 
     public override void Update()
     {
-        if (Time.time >= timer + Core.DISPLAY.DeadDuration)
-            _char.OnDespawn();
+        base.Update();
+        if (isAnimFinish)
+        {
+            OnDeath();
+        }
+    }
+
+    public virtual void OnDeath()
+    {
+        _char.OnDespawn();
     }
 }
 #endregion

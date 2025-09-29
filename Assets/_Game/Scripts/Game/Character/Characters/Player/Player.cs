@@ -33,6 +33,8 @@ public class Player : Character
     public override void OnInit(CharacterStats stats = null)
     {
         base.OnInit(stats);
+        TF.position = Vector3.zero;
+        Core.DISPLAY.SetSkinRotation(new Vector3(0, 180, 0), true);
     }
 
     public override void Run()
@@ -46,13 +48,14 @@ public class Player : Character
         base.OnDespawn();
 
         rangeImg.gameObject.SetActive(false);
-        GameplayManager.Ins.OnGameEnd();
+        GameplayManager.Ins.OnGameEnd(false);
     }
 
     public void OnRevive()
     {
-        //reset health
-        //change state
+        Core.Initialize(Stats);
+        Stats.HP.Reset();
+        Run();
     }
 
     public override void OnDeath()

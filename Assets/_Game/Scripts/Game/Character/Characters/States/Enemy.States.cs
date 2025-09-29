@@ -22,11 +22,12 @@ public class EnemyIdleState : IdleState
 
     public override void Update()
     {
-        if (Core.SENSOR.Target != null && !Core.ATTACK.IsAtkCooldown)
+        base.Update();
+
+        if (Target != null && !IsAttackCooldown)
         {
             ChangeState(STATE.ATTACK);
         }
-
         if (Time.time >= timer + idleTime)
         {
             ChangeState(STATE.MOVE);
@@ -38,6 +39,7 @@ public class EnemyMoveState : MoveState
 {
     EnemyNavigation _nav;
     EnemyMovement _move;
+
     public EnemyMoveState(CoreSystem core) : base(core)
     {
         _nav = (EnemyNavigation)Core.NAVIGATION;
@@ -53,6 +55,13 @@ public class EnemyMoveState : MoveState
 
     public override void Update()
     {
+        base.Update();
+
+        if (Target != null && !IsAttackCooldown)
+        {
+            ChangeState(STATE.TARGET_DETECTED);
+        }
+
         if (_nav.ReachDestination())
         {
             ChangeState(STATE.IDLE);
@@ -71,7 +80,11 @@ public class EnemyAttackState : AttackState
     public override void Enter()
     {
         base.Enter();
+    }
 
+    public override void Update()
+    {
+        base.Update();
     }
 
     protected override void RotateTowardTarget()
@@ -84,6 +97,41 @@ public class EnemyAttackState : AttackState
     }
 }
 
+public class EnemyTargetDetected : GroundedState
+{
+    public override STATE Id => STATE.TARGET_DETECTED;
+    EnemyNavigation _nav;
+
+    float timer;
+    float detectTime;
+
+    public EnemyTargetDetected(CoreSystem core) : base(core)
+    {
+        _nav = Core.NAVIGATION as EnemyNavigation;
+    }
+
+    public override void Enter()
+    {
+        base.Enter();
+        timer = Time.time;
+        detectTime = GetRandomTime(.5f, 1);
+    }
+
+    public override void Update()
+    {
+        base.Update();
+
+        if (Target == null || _nav.ReachDestination())
+        {
+            ChangeState(STATE.IDLE);
+        }
+
+        if (Time.time >= timer + detectTime)
+        {
+            ChangeState(STATE.ATTACK);
+        }
+    }
+}
 
 public class EnemyDeadState : DeadState
 {

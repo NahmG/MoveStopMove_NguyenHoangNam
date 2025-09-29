@@ -11,7 +11,15 @@ public class UIGameplay : UICanvas
     [SerializeField]
     Canvas canvas;
 
-    Camera mainCam => GameplayManager.Ins.mainCam.cam;
+    CameraFollow mainCam;
+    CameraFollow MainCam
+    {
+        get
+        {
+            mainCam ??= GameplayManager.Ins.mainCam;
+            return mainCam;
+        }
+    }
 
     void Awake()
     {
@@ -25,6 +33,12 @@ public class UIGameplay : UICanvas
         settingBtn._OnClick -= OnSettingBtnClick;
         EnemySpawn.Ins._OnEnemySpawn -= SpawnIndicator;
         EnemySpawn.Ins._OnEnemyDespawn -= DespawnIndicator;
+    }
+
+    public override void Open(object param = null)
+    {
+        base.Open(param);
+        MainCam.ChangeCamera(CAMERA_TYPE.GAME_PLAY);
     }
 
     void Update()
@@ -67,7 +81,7 @@ public class UIGameplay : UICanvas
             indicators.Add(indicator);
         }
 
-        indicator.OnInit(target, GameplayManager.Ins.mainCam.cam, canvas, target.Core.DISPLAY.Color);
+        indicator.OnInit(target, MainCam.cam, canvas, target.Core.DISPLAY.Color);
     }
 
     public void DespawnIndicator(Character target)
@@ -96,7 +110,7 @@ public class UIGameplay : UICanvas
     {
         foreach (var ind in indicators)
         {
-            DespawnIndicator(ind.Target);
+            HBPool.Despawn(ind);
         }
         indicators.Clear();
     }
