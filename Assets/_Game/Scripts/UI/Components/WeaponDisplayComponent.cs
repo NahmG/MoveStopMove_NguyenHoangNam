@@ -19,7 +19,7 @@ public class WeaponDisplayComponent : MonoBehaviour
         currentIndex = -1;
         currentModel = null;
 
-        datas = DataManager.Ins.Get<ShopData>().GetItems<Weapon>((int)SHOP.WEAPON);
+        datas = DataManager.Ins.Get<ShopData>().GetItems<Weapon>(SHOP.WEAPON);
         models = DataManager.Ins.Get<EquipmentData>().weapons;
     }
 

@@ -219,7 +219,6 @@ MonoBehaviour:
   poolType: 1
   Stats: {fileID: 11400000, guid: 25fa686155eb70f4ea829f0c86a60c19, type: 2}
   core: {fileID: 1741001615468890671}
-  defaultColor: 1
   IsUlti: 0
   rangeImg: {fileID: 3488801401628787286}
 --- !u!1 &1203831915022907594

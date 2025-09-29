@@ -41,7 +41,7 @@ public class RenderComponent : EquipComponent
     int excludeId;
     [SerializeField]
     bool isUseDefault;
-    public Material defaultMat;
+    public Material defaultMat { get; private set; }
 
     public override void Initialize()
     {

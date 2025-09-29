@@ -68,9 +68,5 @@ namespace Core.Display
             anim.ResetTrigger(currentAnim);
         }
 
-        public void ChangeColor(COLOR color)
-        {
-
-        }
     }
 }

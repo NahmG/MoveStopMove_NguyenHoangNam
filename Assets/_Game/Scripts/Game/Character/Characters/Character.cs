@@ -10,19 +10,7 @@ public class Character : GameUnit, ICharacter
     [SerializeField]
     CoreSystem core;
     public CoreSystem Core => core;
-    [SerializeField]
-    COLOR defaultColor = COLOR.NONE;
     public bool IsDead => Stats.HP.Value <= 0;
-    COLOR _color = COLOR.NONE;
-    public COLOR Color
-    {
-        get => _color;
-        set
-        {
-            _color = value;
-            core.DISPLAY.ChangeColor(value);
-        }
-    }
 
     [HideInInspector]
     public bool IsUlti;
@@ -42,9 +30,7 @@ public class Character : GameUnit, ICharacter
         else
             Stats = stats;
 
-        Color = defaultColor;
         Stats.Level.Reset();
-
         core.Initialize(Stats);
     }
 
@@ -61,7 +47,6 @@ public class Character : GameUnit, ICharacter
     public void OnHit(int dmg)
     {
         Stats.HP.Plus(-dmg);
-
         if (Stats.HP.Value <= 0)
         {
             OnDeath();

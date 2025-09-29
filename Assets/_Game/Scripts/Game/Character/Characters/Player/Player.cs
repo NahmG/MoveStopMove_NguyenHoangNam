@@ -21,7 +21,7 @@ public class Player : Character
 
     public override int WeaponId
     {
-        get => PlayerData.weaponId;
+        get => PlayerData.itemIds[(int)SHOP.WEAPON];
     }
 
     protected override void Awake()
@@ -41,16 +41,27 @@ public class Player : Character
         rangeImg.gameObject.SetActive(true);
     }
 
+    public override void OnDespawn()
+    {
+        base.OnDespawn();
+
+        rangeImg.gameObject.SetActive(false);
+        GameplayManager.Ins.OnGameEnd();
+    }
+
+    public void OnRevive()
+    {
+        //reset health
+        //change state
+    }
+
     public override void OnDeath()
     {
         base.OnDeath();
 
         StartNavigation(false);
         Core.MOVEMENT.StopMovement();
-
         Core.DISPLAY.SetSkinRotation(Quaternion.identity, true);
-
-        rangeImg.gameObject.SetActive(false);
     }
 
     public override void OnLevelUp(float targetLevel)

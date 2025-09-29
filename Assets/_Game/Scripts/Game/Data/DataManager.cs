@@ -44,6 +44,13 @@ public class DataManager : Singleton<DataManager>
         }
         return dataDict[type] as T;
     }
+
+    [Button]
+    public void ClearData()
+    {
+        player.Clear();
+        shop.Clear();
+    }
 }
 
 public abstract class DataComponent : SerializedScriptableObject

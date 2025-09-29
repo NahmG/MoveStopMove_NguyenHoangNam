@@ -5,16 +5,16 @@ using UnityEngine;
 public class GameplayManager : Singleton<GameplayManager>
 {
     public CameraFollow mainCam;
-
     [SerializeField]
     Player player;
     public Player Player => player;
     [SerializeField]
     Level currentLevel;
 
+    UIGameplay uiGameplay;
     List<Character> characters = new();
     bool isGameEnd;
-    UIGameplay uiGameplay;
+    bool isRevive;
 
     void Start()
     {
@@ -43,11 +43,11 @@ public class GameplayManager : Singleton<GameplayManager>
     void ConstructLevel()
     {
         isGameEnd = false;
+        isRevive = false;
         if (currentLevel == null)
         {
             currentLevel = LevelManager.Ins.LoadLevel();
         }
-
         mainCam.SetTarget(player.TF);
 
         //set up character
@@ -75,5 +75,14 @@ public class GameplayManager : Singleton<GameplayManager>
     public void OnGameEnd()
     {
         isGameEnd = true;
+        if (!isRevive)
+        {
+            isRevive = true;
+            UIManager.Ins.OpenUI<UIRevive>();
+        }
+        else
+        {
+            UIManager.Ins.OpenUI<UILose>();
+        }
     }
 }

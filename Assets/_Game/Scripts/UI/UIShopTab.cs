@@ -24,7 +24,7 @@ public class UIShopTab : UICanvasComponent
 
     public void Initialize()
     {
-        itemDatas = DataManager.Ins.Get<ShopData>().GetItems<Skin>((int)type);
+        itemDatas = DataManager.Ins.Get<ShopData>().GetItems<Skin>(type);
         for (int i = 0; i < itemDatas.Count; i++)
         {
             UIItemButton item = Instantiate(itemBtnPref, content);
@@ -54,8 +54,6 @@ public class UIShopTab : UICanvasComponent
 
     void SelectItem(int index)
     {
-        if (currentBtn == index) return;
-
         if (currentBtn >= 0)
         {
             itemBtns[currentBtn].DeSelect();

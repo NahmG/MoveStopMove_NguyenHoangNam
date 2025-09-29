@@ -21,9 +21,10 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  playerName: 
   gold:
     BaseValue: 0
     _value: 0
-  isSet: 1
-  skinIds: ffffffffffffffffffffffffffffffffffffffffffffffff
-  weaponId: 0
+  isSet: 0
+  <equipIds>k__BackingField: ffffffffffffffffffffffffffffffffffffffffffffffff
+  <itemIds>k__BackingField: ffffffffffffffffffffffffffffffff00000000

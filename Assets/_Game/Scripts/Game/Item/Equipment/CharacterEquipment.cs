@@ -10,8 +10,10 @@ public class CharacterEquipment : SerializedMonoBehaviour
     [OdinSerialize]
     protected EquipComponent[] equipPart;
 
-    protected int[] currentSet;
+    protected int[] currentSet = new int[6];
     protected int currentWeapon;
+
+    protected int[] skinId = new int[5];
 
     public Color MainColor { get; private set; }
 
@@ -35,8 +37,8 @@ public class CharacterEquipment : SerializedMonoBehaviour
         for (int i = 0; i < set.Length; i++)
         {
             equipPart[i].Equip(set[i]);
+            currentSet[i] = set[i];
         }
-        currentSet = set;
     }
 
     public virtual void Equip(Item item)
@@ -88,6 +90,7 @@ public class CharacterEquipment : SerializedMonoBehaviour
             UnEquip(EQUIP.WEAPON);
         }
     }
+
 }
 
 public enum EQUIP

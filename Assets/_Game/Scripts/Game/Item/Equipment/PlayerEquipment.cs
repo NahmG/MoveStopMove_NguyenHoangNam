@@ -34,29 +34,43 @@ public class PlayerEquipment : CharacterEquipment
     {
         if (item is Skin && PlayerData.isSet)
         {
-            UnEquip(PlayerData.skinIds);
+            UnEquip(PlayerData.equipIds);
         }
         base.Equip(item);
     }
 
     public void UnEquipOldItem(SHOP shop)
     {
-        Item oldItem = ShopData.GetItems<Item>((int)shop).Find(x => x.isEquip);
+        Item oldItem = ShopData.GetItems<Item>(shop).Find(x => x.isEquip);
         if (oldItem == null) return;
         UnEquip(oldItem);
         oldItem.isEquip = false;
     }
 
+    public void Preview(Item item)
+    {
+
+    }
+
+    public void EquipItem(Item item)
+    {
+
+    }
+
+    public void UnEquipItem(Item item)
+    {
+
+    }
+
     public void Save()
     {
-        PlayerData.weaponId = currentWeapon;
-        PlayerData.skinIds = currentSet;
-
+        PlayerData.itemIds[(int)SHOP.WEAPON] = currentWeapon;
+        PlayerData.equipIds = currentSet;
     }
 
     public void Load()
     {
-        Equip(PlayerData.skinIds);
-        Equip(EQUIP.WEAPON, PlayerData.weaponId);
+        Equip(PlayerData.equipIds);
+        Equip(EQUIP.WEAPON, PlayerData.itemIds[(int)SHOP.WEAPON]);
     }
 }
