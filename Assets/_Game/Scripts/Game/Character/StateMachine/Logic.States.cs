@@ -198,6 +198,10 @@ public abstract class DeadState : BaseLogicState
     public virtual void OnDeath()
     {
         _char.OnDespawn();
+        if (_char is Enemy e)
+        {
+            EnemySpawn.Ins.OnEnemyDespawn(e);
+        }
     }
 }
 #endregion

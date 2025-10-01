@@ -60,8 +60,8 @@ public class SaveData
     {
         playerName = playerData.playerName;
         gold = playerData.gold.Value;
-        equipIds = playerData.equipIds;
-        itemIds = playerData.itemIds;
+        equipIds = playerData.equipId;
+        itemIds = playerData.itemId;
 
         boughtItems = new();
         GetBoughtItems(shopData);

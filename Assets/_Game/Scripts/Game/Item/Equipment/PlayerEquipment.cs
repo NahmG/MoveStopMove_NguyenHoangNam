@@ -30,47 +30,64 @@ public class PlayerEquipment : CharacterEquipment
         Load();
     }
 
-    public override void Equip(Item item)
+    public void AttachModel(Item item)
     {
-        if (item is Skin && PlayerData.isSet)
-        {
-            UnEquip(PlayerData.equipIds);
-        }
-        base.Equip(item);
+        if (isSet)
+            UnEquip();
+
+        if (item is Skin skin)
+            Equip(skin.equipType, skin.model);
+        else if (item is FullSkin full)
+            Equip(full.setId);
     }
 
-    public void UnEquipOldItem(SHOP shop)
+    public void DetachModel(Item item)
     {
-        Item oldItem = ShopData.GetItems<Item>(shop).Find(x => x.isEquip);
-        if (oldItem == null) return;
-        UnEquip(oldItem);
-        oldItem.isEquip = false;
-    }
-
-    public void Preview(Item item)
-    {
-
+        if (item is Skin skin)
+            UnEquip(skin.equipType);
+        else
+            UnEquip();
     }
 
     public void EquipItem(Item item)
     {
+        if (item.shop == SHOP.SET_SKIN)
+        {
+            PlayerData.itemId[(int)SHOP.HAT] = -1;
+            PlayerData.itemId[(int)SHOP.PANT] = -1;
+            PlayerData.itemId[(int)SHOP.SHIELD] = -1;
+        }
+        else
+        {
+            PlayerData.itemId[(int)SHOP.SET_SKIN] = -1;
+        }
 
+        PlayerData.itemId[(int)item.shop] = item.Id;
+        AttachModel(item);
     }
 
     public void UnEquipItem(Item item)
     {
+        PlayerData.itemId[(int)item.shop] = -1;
+        DetachModel(item);
+    }
 
+    public bool IsEquip(Item item)
+    {
+        return PlayerData.itemId[(int)item.shop] == item.Id;
     }
 
     public void Save()
     {
-        PlayerData.itemIds[(int)SHOP.WEAPON] = currentWeapon;
-        PlayerData.equipIds = currentSet;
+        PlayerData.equipId = equipId;
     }
 
     public void Load()
     {
-        Equip(PlayerData.equipIds);
-        Equip(EQUIP.WEAPON, PlayerData.itemIds[(int)SHOP.WEAPON]);
+        equipId = PlayerData.equipId;
+        Equip(equipId);
+
+        int weapon = PlayerData.itemId[(int)SHOP.WEAPON];
+        Equip(EQUIP.WEAPON, weapon);
     }
 }

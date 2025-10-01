@@ -25,9 +25,8 @@ MonoBehaviour:
   description: 
   icon: {fileID: 21300000, guid: b8da57ec9bf32e743bce13b62df701b5, type: 3}
   cost: 0
+  Id: 0
+  model: 0
+  shop: 0
   isLock: 0
-  isEquip: 0
-  isSet: 0
-  type: 1
-  modelId: 0
-  setId: ffffffffffffffffffffffffffffffffffffffffffffffff
+  equipType: 1

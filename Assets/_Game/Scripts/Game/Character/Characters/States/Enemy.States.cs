@@ -89,10 +89,7 @@ public class EnemyAttackState : AttackState
 
     protected override void RotateTowardTarget()
     {
-        ICharacter target = Core.SENSOR.Target;
-        Vector3 dir = target.TF.position - _char.TF.position;
-        dir.y = 0;
-
+        Vector3 dir = Core.SENSOR.TargetDir;
         _enemy.TF.rotation = Quaternion.LookRotation(dir);
     }
 }

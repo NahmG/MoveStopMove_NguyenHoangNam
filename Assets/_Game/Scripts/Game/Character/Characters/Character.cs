@@ -32,6 +32,9 @@ public class Character : GameUnit, ICharacter
 
         Stats.Level.Reset();
         core.Initialize(Stats);
+
+        float mult = LevelToMultiplier(Stats.Level.Value);
+        Core.DISPLAY.Scale = mult;
     }
 
     public virtual void Run()
@@ -42,6 +45,7 @@ public class Character : GameUnit, ICharacter
 
     public virtual void OnDespawn()
     {
+        Core.DISPLAY.Equipment.OnDespawn();
     }
 
     public void OnHit(int dmg)

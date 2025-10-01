@@ -17,12 +17,6 @@ public class Enemy : Character
         StartNavigation(false);
     }
 
-    public override void OnDespawn()
-    {
-        base.OnDespawn();
-        EnemySpawn.Ins.OnEnemyDespawn(this);
-    }
-
     public override void OnDeath()
     {
         base.OnDeath();

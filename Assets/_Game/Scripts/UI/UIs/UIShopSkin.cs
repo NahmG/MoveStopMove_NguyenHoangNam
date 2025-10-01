@@ -29,7 +29,7 @@ public class UIShopSkin : UICanvas
             OpenTab(value);
         }
     }
-    Skin currentItem;
+    Item currentItem;
     PlayerData playerData;
     PlayerEquipment playerEquip;
 
@@ -121,7 +121,7 @@ public class UIShopSkin : UICanvas
         }
     }
 
-    void OnItemSelect(Skin item)
+    void OnItemSelect(Item item)
     {
         currentItem = item;
         UpdateBtnState(item);
@@ -130,7 +130,7 @@ public class UIShopSkin : UICanvas
             cost.text = item.cost.ToString();
 
         description.text = item.description;
-        playerEquip.Equip(item);
+        playerEquip.AttachModel(item);
     }
 
     void OnBuyBtnClick(int index)
@@ -151,17 +151,14 @@ public class UIShopSkin : UICanvas
     {
         if (currentItem == null || currentItem.isLock) return;
 
-        if (currentItem.isEquip)
+        if (playerEquip.IsEquip(currentItem))
         {
-            playerEquip.UnEquip(currentItem);
+            playerEquip.UnEquipItem(currentItem);
             playerEquip.Save();
-            currentItem.isEquip = false;
         }
         else
         {
-            playerEquip.UnEquipOldItem(tabs[currentTab].type);
-            currentItem.isEquip = true;
-            playerEquip.Equip(currentItem);
+            playerEquip.EquipItem(currentItem);
             playerEquip.Save();
         }
 
@@ -173,7 +170,7 @@ public class UIShopSkin : UICanvas
         buyBtn.gameObject.SetActive(item.isLock);
         equipBtn.gameObject.SetActive(!item.isLock);
 
-        if (item.isEquip)
+        if (playerEquip.IsEquip(item))
             equipBtn.SetState(UIButton.STATE.SELECTING);
         else
             equipBtn.SetState(UIButton.STATE.OPENING);

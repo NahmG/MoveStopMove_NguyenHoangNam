@@ -53,8 +53,8 @@ public class GameplayManager : Singleton<GameplayManager>
         mainCam.SetTarget(player.TF);
 
         //set up character
-        EnemySpawn.Ins.OnInit();
         player.OnInit();
+        EnemySpawn.Ins.OnInit();
 
         uiGameplay?.SpawnIndicator(player);
     }

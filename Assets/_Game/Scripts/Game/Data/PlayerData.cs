@@ -6,14 +6,13 @@ public class PlayerData : DataComponent
 {
     public string playerName;
     public Stat gold;
-    public bool isSet;
-    public int[] equipIds = new int[] { -1, -1, -1, -1, -1, -1 };
-    public int[] itemIds = new[] { -1, -1, -1, -1, 0 };
+    public int[] equipId = new int[] { -1, -1, -1, -1, -1, -1 };
+    public int[] itemId = new[] { -1, -1, -1, -1, 0 };
 
-    public void SetData(int[] equipIds, int[] itemIds, float gold)
+    public void SetData(int[] equipId, int[] itemId, float gold)
     {
-        this.equipIds = equipIds;
-        this.itemIds = itemIds;
+        this.equipId = equipId;
+        this.itemId = itemId;
         this.gold.Set(gold);
     }
 
@@ -21,8 +20,7 @@ public class PlayerData : DataComponent
     {
         playerName = "";
         gold.Set(0);
-        isSet = false;
-        equipIds = new int[] { -1, -1, -1, -1, -1, -1 };
-        itemIds = new[] { -1, -1, -1, -1, 0 };
+        equipId = new int[] { -1, -1, -1, -1, -1, -1 };
+        itemId = new[] { -1, -1, -1, -1, 0 };
     }
 }

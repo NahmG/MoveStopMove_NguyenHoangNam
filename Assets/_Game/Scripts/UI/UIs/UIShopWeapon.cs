@@ -15,7 +15,7 @@ public class UIShopWeapon : UICanvas
     [SerializeField]
     WeaponDisplayComponent display;
 
-    Weapon currentWeapon;
+    Item currentWeapon;
     PlayerData playerData;
     PlayerEquipment playerEquip;
 
@@ -86,14 +86,9 @@ public class UIShopWeapon : UICanvas
         if (currentWeapon == null) return;
         if (currentWeapon.isLock) return;
 
-        if (currentWeapon.isEquip) return;
-
-        playerEquip.UnEquipOldItem(SHOP.WEAPON);
-        playerEquip.Equip(currentWeapon);
-        currentWeapon.isEquip = true;
-        playerEquip.Save();
-
         equipBtn.SetState(UIButton.STATE.SELECTING);
+        // Equip item
+        playerEquip.EquipItem(currentWeapon);
     }
 
     void OnWatchAdsBtnClick(int index)
@@ -101,7 +96,7 @@ public class UIShopWeapon : UICanvas
 
     }
 
-    void OnWeaponSelect(Weapon item)
+    void OnWeaponSelect(Item item)
     {
         currentWeapon = item;
         UpdateBtnState(item);
@@ -121,7 +116,7 @@ public class UIShopWeapon : UICanvas
 
         if (!item.isLock)
         {
-            if (item.isEquip)
+            if (playerEquip.IsEquip(item))
                 equipBtn.SetState(UIButton.STATE.SELECTING);
             else
                 equipBtn.SetState(UIButton.STATE.OPENING);

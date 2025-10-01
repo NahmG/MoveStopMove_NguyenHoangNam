@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -10,14 +11,14 @@ public class ShopData : DataComponent
     [ListDrawerSettings(ListElementLabelName = "shop", ShowIndexLabels = true)]
     public List<ItemList> allItems = new();
 
-    public List<T> GetItems<T>(SHOP type) where T : Item
+    public List<Item> GetItems(SHOP type)
     {
-        return allItems[(int)type].items.ConvertAll(x => (T)x);
+        return allItems[(int)type].items.ToList();
     }
 
-    public T GetItem<T>(SHOP type, int index) where T : Item
+    public Item GetItem(SHOP type, int index)
     {
-        return allItems[(int)type].items[index] as T;
+        return allItems[(int)type].items[index];
     }
 
     public void SetData(List<SaveData.IntList> boughtItems)
@@ -41,13 +42,8 @@ public class ShopData : DataComponent
             for (int j = 0; j < items.Count; j++)
             {
                 items[j].isLock = true;
-                items[j].isEquip = false;
             }
         }
-
-        Weapon first = GetItem<Weapon>(SHOP.WEAPON, 0);
-        first.isEquip = true;
-        first.isLock = false;
     }
 }
 

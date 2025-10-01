@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class WeaponDisplayComponent : MonoBehaviour
 {
-    public Action<Weapon> _OnWeaponSelect;
+    public Action<Item> _OnWeaponSelect;
 
     [SerializeField]
     Transform weaponPoint;
 
-    List<Weapon> datas;
+    List<Item> datas;
     List<GameObject> models;
     int currentIndex = -1;
     GameObject currentModel;
@@ -19,7 +19,7 @@ public class WeaponDisplayComponent : MonoBehaviour
         currentIndex = -1;
         currentModel = null;
 
-        datas = DataManager.Ins.Get<ShopData>().GetItems<Weapon>(SHOP.WEAPON);
+        datas = DataManager.Ins.Get<ShopData>().GetItems(SHOP.WEAPON);
         models = DataManager.Ins.Get<EquipmentData>().weapons;
     }
 

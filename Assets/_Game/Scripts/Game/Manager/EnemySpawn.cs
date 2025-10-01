@@ -60,6 +60,7 @@ public class EnemySpawn : Singleton<EnemySpawn>
 
     void Despawn(Enemy enemy)
     {
+        enemy.OnDespawn();
         HBPool.Despawn(enemy);
         _enemyCount--;
 
@@ -73,6 +74,7 @@ public class EnemySpawn : Singleton<EnemySpawn>
     {
         foreach (var enemy in Enemies)
         {
+            enemy.OnDespawn();
             HBPool.Despawn(enemy);
         }
         Enemies.Clear();

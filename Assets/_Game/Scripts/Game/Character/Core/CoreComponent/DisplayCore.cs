@@ -34,7 +34,6 @@ namespace Core.Display
         public override void Initialize(CoreSystem core)
         {
             base.Initialize(core);
-            Scale = 1;
             Equipment?.Initialize();
             Color = Equipment?.MainColor == Color.white ? Color.black : Equipment.MainColor;
         }

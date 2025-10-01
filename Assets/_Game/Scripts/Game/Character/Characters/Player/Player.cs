@@ -21,7 +21,7 @@ public class Player : Character
 
     public override int WeaponId
     {
-        get => PlayerData.itemIds[(int)SHOP.WEAPON];
+        get => PlayerData.itemId[(int)SHOP.WEAPON];
     }
 
     protected override void Awake()

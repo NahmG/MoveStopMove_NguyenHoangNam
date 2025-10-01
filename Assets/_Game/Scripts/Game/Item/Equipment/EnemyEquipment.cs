@@ -6,7 +6,13 @@ public class EnemyEquipment : CharacterEquipment
     {
         base.Initialize();
 
-        int[] randomSet = DataManager.Ins.Get<EquipmentData>().GetRandomSet();
-        Equip(randomSet);
+        equipId = DataManager.Ins.Get<EquipmentData>().GetRandomSet();
+        Equip(equipId);
+    }
+
+    public override void OnDespawn()
+    {
+        base.OnDespawn();
+        UnEquip();
     }
 }

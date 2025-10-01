@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class UIShopTab : UICanvasComponent
 {
-    public Action<Skin> _OnItemSelect;
+    public Action<Item> _OnItemSelect;
     [SerializeField] Transform content;
     [SerializeField] UIItemButton itemBtnPref;
     public SHOP type;
 
-    List<Skin> itemDatas;
+    List<Item> itemDatas;
     List<UIItemButton> itemBtns = new();
     int currentBtn = -1;
 
@@ -24,7 +24,7 @@ public class UIShopTab : UICanvasComponent
 
     public void Initialize()
     {
-        itemDatas = DataManager.Ins.Get<ShopData>().GetItems<Skin>(type);
+        itemDatas = DataManager.Ins.Get<ShopData>().GetItems(type);
         for (int i = 0; i < itemDatas.Count; i++)
         {
             UIItemButton item = Instantiate(itemBtnPref, content);
