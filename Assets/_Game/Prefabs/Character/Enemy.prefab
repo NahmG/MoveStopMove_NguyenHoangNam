@@ -229,8 +229,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7511991870175656322}
-  - component: {fileID: 8535238518574677828}
   - component: {fileID: 3658182760649939130}
+  - component: {fileID: 416823557319201148}
   m_Layer: 0
   m_Name: Skin
   m_TagString: Untagged
@@ -255,24 +255,6 @@ Transform:
   - {fileID: 5889562029428852940}
   m_Father: {fileID: 4381767387657884199}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8535238518574677828
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3027446842472326609}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d90f6968b11625446a52965d0ee0ea87, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <AtkDuration>k__BackingField: 0.5
-  <DeadDuration>k__BackingField: 1.5
-  <Equipment>k__BackingField: {fileID: 3658182760649939130}
-  anim: {fileID: 6053345907870830559}
-  skinTf: {fileID: 7511991870175656322}
-  sensorTf: {fileID: 1560555950520978688}
 --- !u!114 &3658182760649939130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -417,6 +399,25 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+--- !u!114 &416823557319201148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3027446842472326609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21bc9e66719ec4d47ac3c5560947552a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <AtkDuration>k__BackingField: 0.5
+  <DeadDuration>k__BackingField: 1.5
+  <Equipment>k__BackingField: {fileID: 3658182760649939130}
+  anim: {fileID: 6053345907870830559}
+  skinTf: {fileID: 7511991870175656322}
+  sensorTf: {fileID: 1560555950520978688}
+  indicator: {fileID: 7938332819108574815}
 --- !u!1 &3182168815012759782
 GameObject:
   m_ObjectHideFlags: 0
@@ -622,9 +623,7 @@ MonoBehaviour:
   poolType: 2
   Stats: {fileID: 11400000, guid: 96ff37d139aa6ab46b5ed24ac5e69602, type: 2}
   core: {fileID: 8123858196891224044}
-  defaultColor: 2
-  IsUlti: 0
-  indicator: {fileID: 7938332819108574815}
+  IsBoost: 0
 --- !u!1 &5639989146336289085
 GameObject:
   m_ObjectHideFlags: 0
@@ -729,7 +728,7 @@ MonoBehaviour:
     SerializedBytes: 
     ReferencedUnityObjects:
     - {fileID: 8340267514066783854}
-    - {fileID: 8535238518574677828}
+    - {fileID: 416823557319201148}
     - {fileID: 7951415770192721019}
     - {fileID: 6700969122604421418}
     - {fileID: 6164348699462460286}
@@ -825,6 +824,7 @@ MonoBehaviour:
       Entry: 8
       Data: 
   <CHARACTER>k__BackingField: {fileID: 1440097553555852307}
+  isInit: 0
 --- !u!1 &6875787666985347980
 GameObject:
   m_ObjectHideFlags: 0
@@ -946,7 +946,7 @@ GameObject:
   - component: {fileID: 5889562029428852940}
   - component: {fileID: 3141580909166588992}
   m_Layer: 0
-  m_Name: Target
+  m_Name: Indicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

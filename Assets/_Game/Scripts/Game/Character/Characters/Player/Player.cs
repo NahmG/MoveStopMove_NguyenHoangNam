@@ -4,17 +4,13 @@ using UnityEngine.Experimental.GlobalIllumination;
 
 public class Player : Character
 {
-    [SerializeField]
-    Transform rangeImg;
     PlayerData playerData;
     public PlayerData PlayerData
     {
         get
         {
             if (playerData == null)
-            {
                 playerData = DataManager.Ins.Get<PlayerData>();
-            }
             return playerData;
         }
     }
@@ -27,7 +23,7 @@ public class Player : Character
     protected override void Awake()
     {
         base.Awake();
-        rangeImg.gameObject.SetActive(false);
+        Core.DISPLAY.TurnIndicator(false);
     }
 
     public override void OnInit(CharacterStats stats = null)
@@ -40,15 +36,16 @@ public class Player : Character
     public override void Run()
     {
         base.Run();
-        rangeImg.gameObject.SetActive(true);
+        Core.DISPLAY.TurnIndicator(true);
     }
 
     public override void OnDespawn()
     {
         base.OnDespawn();
 
-        rangeImg.gameObject.SetActive(false);
-        GameplayManager.Ins.OnGameEnd(false);
+        StartNavigation(false);
+        Core.isInit = false;
+        Core.DISPLAY.TurnIndicator(false);
     }
 
     public void OnRevive()

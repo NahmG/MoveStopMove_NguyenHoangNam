@@ -18,6 +18,8 @@ public class EnemyIdleState : IdleState
         base.Enter();
         idleTime = GetRandomTime(2, 3);
         timer = Time.time;
+
+        Core.MOVEMENT.StopMovement();
     }
 
     public override void Update()
@@ -77,16 +79,6 @@ public class EnemyAttackState : AttackState
         _enemy = (Enemy)Core.CHARACTER;
     }
 
-    public override void Enter()
-    {
-        base.Enter();
-    }
-
-    public override void Update()
-    {
-        base.Update();
-    }
-
     protected override void RotateTowardTarget()
     {
         Vector3 dir = Core.SENSOR.TargetDir;
@@ -134,6 +126,12 @@ public class EnemyDeadState : DeadState
 {
     public EnemyDeadState(CoreSystem core) : base(core)
     {
+    }
+
+    public override void OnDeath()
+    {
+        base.OnDeath();
+        EnemySpawn.Ins.OnEnemyDespawn(_char as Enemy);
     }
 }
 

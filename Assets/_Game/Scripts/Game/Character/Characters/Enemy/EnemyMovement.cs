@@ -20,6 +20,12 @@ namespace Core.Movement
             base.UpdateData();
         }
 
+        public override void SetVelocity(Vector3 velocity)
+        {
+            base.SetVelocity(velocity);
+            agent.velocity = velocity;
+        }
+
         public override void SetDestination(Vector3 destination)
         {
             agent.SetDestination(destination);

@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
+
+using URandom = UnityEngine.Random;
 
 public class EnemySpawn : Singleton<EnemySpawn>
 {
@@ -44,7 +45,7 @@ public class EnemySpawn : Singleton<EnemySpawn>
         _enemyCount = 0;
         availableEnemy = 0;
     }
-    #endregion
+    #endregion 
 
     #region SPAWN_FUNC
     void Spawn(out Enemy e)
@@ -90,11 +91,23 @@ public class EnemySpawn : Singleton<EnemySpawn>
         if (availableEnemy > 0)
         {
             Spawn(out Enemy e);
+            e.SetUp(GetEnemyInitLevel());
             e.Run();
+        }
+        if (_enemyCount <= 0)
+        {
+            GameplayManager.Ins.Player.ChangeState(STATE.WIN);
         }
     }
 
-    Vector3 GetSpawnPos()
+    int GetEnemyInitLevel()
+    {
+        float playerLvl = GameplayManager.Ins.Player.Stats.Level.Value;
+        int rnd = (int)URandom.Range(1, playerLvl / 2);
+        return rnd;
+    }
+
+    public Vector3 GetSpawnPos()
     {
         Vector3 spawnPos;
         int attempts = 0;

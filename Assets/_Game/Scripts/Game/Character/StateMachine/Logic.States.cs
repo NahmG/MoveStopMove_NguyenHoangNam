@@ -8,6 +8,7 @@ public abstract class BaseLogicState : BaseState
 {
     protected CoreSystem Core;
     protected CharacterStats Stats;
+    protected Character _char;
 
     protected bool isAnimFinish;
     protected float animTime;
@@ -17,6 +18,7 @@ public abstract class BaseLogicState : BaseState
     public BaseLogicState(CoreSystem core)
     {
         Core = core;
+        _char = core.CHARACTER;
     }
 
     public override void Enter()
@@ -52,11 +54,8 @@ public abstract class GroundedState : BaseLogicState
 
 public abstract class IdleState : GroundedState
 {
-    protected Character _char;
-
     protected IdleState(CoreSystem core) : base(core)
     {
-        _char = Core.CHARACTER;
     }
 
     public override STATE Id => STATE.IDLE;
@@ -65,17 +64,11 @@ public abstract class IdleState : GroundedState
     {
         base.Enter();
         Core.DISPLAY.ChangeAnim(CONSTANTS.IDLE_ANIM_NAME);
-        Core.MOVEMENT.SetVelocity(Vector3.zero);
     }
 
     public override void Update()
     {
         base.Update();
-    }
-
-    public override void FixedUpdate()
-    {
-        Core.MOVEMENT.SetVelocity(Vector3.zero);
     }
 }
 
@@ -127,11 +120,9 @@ public abstract class InAirState : BaseLogicState
 public abstract class AttackState : BaseLogicState
 {
     public override STATE Id => STATE.ATTACK;
-    protected Character _char;
 
     protected AttackState(CoreSystem core) : base(core)
     {
-        _char = core.CHARACTER;
         animTime = Core.DISPLAY.AtkDuration;
     }
 
@@ -143,11 +134,10 @@ public abstract class AttackState : BaseLogicState
 
         Core.ATTACK.IsAttack = true;
 
-        if (_char.IsUlti)
-        {
+        if (_char.IsBoost)
             Core.DISPLAY.ChangeAnim(CONSTANTS.ULTI_ANIM_NAME);
-        }
-        Core.DISPLAY.ChangeAnim(CONSTANTS.ATTACK_ANIM_NAME);
+        else
+            Core.DISPLAY.ChangeAnim(CONSTANTS.ATTACK_ANIM_NAME);
     }
 
     public override void Update()
@@ -171,11 +161,9 @@ public abstract class AttackState : BaseLogicState
 public abstract class DeadState : BaseLogicState
 {
     public override STATE Id => STATE.DEAD;
-    Character _char;
 
     protected DeadState(CoreSystem core) : base(core)
     {
-        _char = core.CHARACTER;
         animTime = Core.DISPLAY.DeadDuration;
     }
 
@@ -198,10 +186,6 @@ public abstract class DeadState : BaseLogicState
     public virtual void OnDeath()
     {
         _char.OnDespawn();
-        if (_char is Enemy e)
-        {
-            EnemySpawn.Ins.OnEnemyDespawn(e);
-        }
     }
 }
 #endregion

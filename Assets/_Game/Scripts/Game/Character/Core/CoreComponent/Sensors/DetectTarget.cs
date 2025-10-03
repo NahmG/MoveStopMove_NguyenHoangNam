@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Core.Sensor;
 using UnityEngine;
 
@@ -15,6 +14,7 @@ public class DetectTarget : BaseSensor
     Character _currentTarget;
     Collider[] colliders = new Collider[10];
     List<Collider> hostileColliders = new();
+    float _radius;
 
     void Awake()
     {
@@ -24,6 +24,8 @@ public class DetectTarget : BaseSensor
     public override void UpdateData()
     {
         base.UpdateData();
+
+        _radius = _char.Range;
 
         UpdateTargetCollection();
         UpdateTargetState();
@@ -38,8 +40,6 @@ public class DetectTarget : BaseSensor
 
     void UpdateTargetState()
     {
-        float _radius = _char.Stats.AtkRange.Value;
-
         if (_currentTarget == null)
         {
             GetTarget(hostileColliders);
@@ -54,8 +54,6 @@ public class DetectTarget : BaseSensor
     {
         Array.Clear(colliders, 0, colliders.Length);
         hostileColliders.Clear();
-
-        float _radius = _char.Stats.AtkRange.Value;
 
         Physics.OverlapSphereNonAlloc(transform.position, _radius, colliders, layer);
         for (int i = 0; i < colliders.Length; i++)
@@ -80,7 +78,7 @@ public class DetectTarget : BaseSensor
             {
                 _currentTarget = _target;
                 if (_char is Player && _currentTarget is Enemy _e)
-                    _e.TurnOnIndicator(true);
+                    _e.Core.DISPLAY.TurnIndicator(true);
 
                 break;
             }
@@ -93,7 +91,7 @@ public class DetectTarget : BaseSensor
     public void RemoveTarget()
     {
         if (_char is Player && _currentTarget is Enemy _e)
-            _e.TurnOnIndicator(false);
+            _e.Core.DISPLAY.TurnIndicator(false);
 
         _currentTarget = null;
         Sensor.Target = null;
@@ -102,7 +100,7 @@ public class DetectTarget : BaseSensor
     void OnDrawGizmos()
     {
         Gizmos.color = Color.white;
-        float _radius = _char.Stats.AtkRange.Value;
+        float _radius = _char.Range;
         Gizmos.DrawWireSphere(transform.position, _radius);
     }
 }

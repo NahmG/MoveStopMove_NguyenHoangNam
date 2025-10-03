@@ -44,6 +44,9 @@ public class ShopData : DataComponent
                 items[j].isLock = true;
             }
         }
+
+        Item firstWeapon = GetItem(SHOP.WEAPON, 0);
+        firstWeapon.isLock = false;
     }
 }
 

@@ -7,6 +7,12 @@ public class PlayerIdleState : IdleState
     {
     }
 
+    public override void Enter()
+    {
+        base.Enter();
+        Core.MOVEMENT.SetVelocity(Vector3.zero);
+    }
+
     public override void Update()
     {
         base.Update();
@@ -19,6 +25,12 @@ public class PlayerIdleState : IdleState
         {
             ChangeState(STATE.ATTACK);
         }
+    }
+
+    public override void FixedUpdate()
+    {
+        base.FixedUpdate();
+        Core.MOVEMENT.SetVelocity(Vector3.zero);
     }
 }
 
@@ -95,7 +107,7 @@ public class PlayerDeadState : DeadState
     public override void OnDeath()
     {
         base.OnDeath();
-        Core.isInit = false;
+        GameplayManager.Ins.OnGameEnd(false);
     }
 }
 
@@ -110,6 +122,10 @@ public class PlayerWinState : BaseLogicState
     {
         Core.DISPLAY.ChangeAnim(CONSTANTS.WIN_ANIM_NAME);
         Core.MOVEMENT.StopMovement();
+        Core.DISPLAY.SetSkinRotation(new Vector3(0, 180, 0), true);
+
+        GameplayManager.Ins.OnGameEnd(true);
+        ((Player)_char).OnDespawn();
     }
 }
 

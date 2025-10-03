@@ -150,6 +150,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
+  - {fileID: 3488801401628787286}
   - {fileID: 1697317066949670533}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -219,8 +220,7 @@ MonoBehaviour:
   poolType: 1
   Stats: {fileID: 11400000, guid: 25fa686155eb70f4ea829f0c86a60c19, type: 2}
   core: {fileID: 1741001615468890671}
-  IsUlti: 0
-  rangeImg: {fileID: 3488801401628787286}
+  IsBoost: 0
 --- !u!1 &1203831915022907594
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,13 +324,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2956754859205128202}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4227499128213096382}
-  m_Father: {fileID: 5852995984342899244}
+  m_Father: {fileID: 2484365238312622976}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3182910490406411038
 GameObject:
@@ -706,8 +706,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5852995984342899244}
-  - component: {fileID: 5149413291639020146}
   - component: {fileID: 6922485037385463290}
+  - component: {fileID: 6865121066461984635}
   m_Layer: 0
   m_Name: Skin
   m_TagString: Untagged
@@ -729,27 +729,8 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 889461196197619964}
-  - {fileID: 3488801401628787286}
   m_Father: {fileID: 1697317066949670533}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
---- !u!114 &5149413291639020146
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6677053458756712368}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d90f6968b11625446a52965d0ee0ea87, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <AtkDuration>k__BackingField: 0.5
-  <DeadDuration>k__BackingField: 1.5
-  <Equipment>k__BackingField: {fileID: 6922485037385463290}
-  anim: {fileID: 7120758356705199494}
-  skinTf: {fileID: 5852995984342899244}
-  sensorTf: {fileID: 8011814149022552124}
 --- !u!114 &6922485037385463290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -894,6 +875,25 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+--- !u!114 &6865121066461984635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6677053458756712368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d047a4d04ab9c9d49a3bf50a06a6d30d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <AtkDuration>k__BackingField: 0.5
+  <DeadDuration>k__BackingField: 1.5
+  <Equipment>k__BackingField: {fileID: 6922485037385463290}
+  anim: {fileID: 7120758356705199494}
+  skinTf: {fileID: 5852995984342899244}
+  sensorTf: {fileID: 8011814149022552124}
+  rangeIndicator: {fileID: 3488801401628787286}
 --- !u!1 &7617619398689223345
 GameObject:
   m_ObjectHideFlags: 0
@@ -1081,7 +1081,7 @@ MonoBehaviour:
     SerializedBytes: 
     ReferencedUnityObjects:
     - {fileID: 5867118561863480964}
-    - {fileID: 5149413291639020146}
+    - {fileID: 6865121066461984635}
     - {fileID: 2246204819870021297}
     - {fileID: 5784956841054578650}
     - {fileID: 3577263951598857205}
@@ -1177,6 +1177,7 @@ MonoBehaviour:
       Entry: 8
       Data: 
   <CHARACTER>k__BackingField: {fileID: 677559977807763756}
+  isInit: 0
 --- !u!1001 &3975217483100719914
 PrefabInstance:
   m_ObjectHideFlags: 0

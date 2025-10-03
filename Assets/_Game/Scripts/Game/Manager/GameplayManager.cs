@@ -5,14 +5,18 @@ using UnityEngine;
 public class GameplayManager : Singleton<GameplayManager>
 {
     public CameraFollow mainCam;
+
     [SerializeField]
     Player player;
     public Player Player => player;
-
     Level currentLevel;
     UIGameplay uiGameplay;
     bool isGameEnd;
     bool isRevive;
+
+    [SerializeField]
+    BoosterController booster;
+    public BoosterController Booster => booster;
 
     void Start()
     {
@@ -50,6 +54,7 @@ public class GameplayManager : Singleton<GameplayManager>
         {
             currentLevel = LevelManager.Ins.LoadLevel();
         }
+
         mainCam.SetTarget(player.TF);
 
         //set up character
@@ -57,6 +62,7 @@ public class GameplayManager : Singleton<GameplayManager>
         EnemySpawn.Ins.OnInit();
 
         uiGameplay?.SpawnIndicator(player);
+        booster.Spawn();
     }
 
     void DestructLevel()
@@ -67,10 +73,10 @@ public class GameplayManager : Singleton<GameplayManager>
             currentLevel = null;
         }
 
-
         EnemySpawn.Ins.OnDespawn();
         uiGameplay?.DespawnAllIndicator();
-
+        mainCam.Reset();
+        booster?.Despawn();
         HBPool.Collect(PoolType.BULLET);
     }
 
@@ -104,5 +110,4 @@ public class GameplayManager : Singleton<GameplayManager>
                 UIManager.Ins.OpenUI<UILose>();
         }
     }
-
 }

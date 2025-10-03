@@ -238,7 +238,7 @@ Transform:
   m_GameObject: {fileID: 450674164}
   serializedVersion: 2
   m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 0, y: 13, z: -12}
+  m_LocalPosition: {x: 0, y: 15, z: -14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -302,10 +302,10 @@ MonoBehaviour:
       Data: 0
     - Name: 
       Entry: 4
-      Data: 13
+      Data: 15
     - Name: 
       Entry: 4
-      Data: -12
+      Data: -14
     - Name: 
       Entry: 8
       Data: 
@@ -770,7 +770,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 127
+    m_Bits: 4294967295
 --- !u!114 &1295087307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1108,6 +1108,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCam: {fileID: 450674168}
   player: {fileID: 7963414787577200790}
+  booster:
+    pref: {fileID: 9087393786933366535, guid: 4c88becfdda3cb74f87fabb2d09b8e4a, type: 3}
 --- !u!1001 &368323385679861762
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1381,5 +1383,5 @@ SceneRoots:
   - {fileID: 908641333}
   - {fileID: 643753685}
   - {fileID: 1732639623}
-  - {fileID: 1295087309}
   - {fileID: 743309255}
+  - {fileID: 1295087309}

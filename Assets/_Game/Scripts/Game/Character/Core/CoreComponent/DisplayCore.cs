@@ -19,15 +19,7 @@ namespace Core.Display
         string currentAnim = "Idle";
 
         float _scale;
-        public float Scale
-        {
-            get => _scale;
-            set
-            {
-                _scale = value;
-                skinTf.localScale = Vector3.one * _scale;
-            }
-        }
+        public float Scale => _scale;
 
         public Color Color { get; private set; }
 
@@ -36,6 +28,12 @@ namespace Core.Display
             base.Initialize(core);
             Equipment?.Initialize();
             Color = Equipment?.MainColor == Color.white ? Color.black : Equipment.MainColor;
+        }
+
+        public void SetSkinScale(float value)
+        {
+            _scale = value;
+            skinTf.localScale = Vector3.one * _scale;
         }
 
         public void SetSkinRotation(Vector3 vector, bool isLocal)
@@ -73,5 +71,7 @@ namespace Core.Display
             anim.ResetTrigger(currentAnim);
         }
 
+        public virtual void TurnIndicator(bool isOn) { }
+        public virtual void UpdateIndicator(float range) { }
     }
 }
