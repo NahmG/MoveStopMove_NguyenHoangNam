@@ -5,8 +5,6 @@ public class BulletBase : GameUnit
 {
     [Header("Setting")]
     [SerializeField]
-    float lifeTime;
-    [SerializeField]
     float speed, rotateSpeed;
     [SerializeField]
     float defaultSize;
@@ -15,8 +13,9 @@ public class BulletBase : GameUnit
 
     protected Character source;
     bool isFired;
-    float timer;
+    float maxRange;
     Vector3 moveDir;
+    Vector3 startpos;
     Quaternion rotation;
 
     float _size;
@@ -30,7 +29,7 @@ public class BulletBase : GameUnit
         }
     }
 
-    public void Fire(Vector3 moveDir, Character source, float size, int modelId = -1)
+    public void Fire(Vector3 moveDir, Character source, float size, float range, int modelId = -1, bool isBoost = false)
     {
         isFired = true;
         skin.ShowModel(modelId);
@@ -39,7 +38,7 @@ public class BulletBase : GameUnit
         this.moveDir = moveDir.normalized;
         skin.transform.rotation = Quaternion.LookRotation(moveDir);
 
-        timer = Time.time;
+        startpos = TF.position;
         Size = size;
     }
 
@@ -53,7 +52,7 @@ public class BulletBase : GameUnit
     {
         if (isFired)
         {
-            if (Time.time >= timer + lifeTime)
+            if (Vector3.Distance(TF.position, startpos) >= maxRange)
                 OnDespawn();
 
             transform.Translate(speed * Time.deltaTime * moveDir);
@@ -66,6 +65,7 @@ public class BulletBase : GameUnit
         if (other.TryGetComponent(out Character _target))
         {
             OnHitTarget(_target);
+            OnDespawn();
         }
     }
 
@@ -75,6 +75,5 @@ public class BulletBase : GameUnit
         //OnHit
         source.OnLevelUp(target.Stats.Level.Value);
         target.OnHit(10);
-        OnDespawn();
     }
 }
