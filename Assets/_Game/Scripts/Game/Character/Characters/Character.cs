@@ -11,10 +11,17 @@ public class Character : GameUnit, ICharacter
     CoreSystem core;
     public CoreSystem Core => core;
     public bool IsDead => Stats.HP.Value <= 0;
-
-    [HideInInspector]
-    public bool IsUlti = false;
     public virtual int WeaponId { get; protected set; }
+    float range;
+    public float Range
+    {
+        get => range;
+        set
+        {
+            range = value;
+            Core.DISPLAY.UpdateIndicator(Range);
+        }
+    }
 
     protected virtual void Awake()
     {
@@ -33,8 +40,7 @@ public class Character : GameUnit, ICharacter
         Stats.Level.Reset();
         core.Initialize(Stats);
 
-        float mult = LevelToMultiplier(Stats.Level.Value);
-        Core.DISPLAY.Scale = mult;
+        UpdateParamByLevel();
     }
 
     public virtual void Run()
@@ -97,14 +103,20 @@ public class Character : GameUnit, ICharacter
     public virtual void OnLevelUp(float targetLevel)
     {
         //level up
-        int add = LevelToAddend(targetLevel);
+        int add = LevelToAdd(targetLevel);
         Stats.Level.Plus(add);
 
+        UpdateParamByLevel();
+    }
+
+    public virtual void UpdateParamByLevel()
+    {
         float mult = LevelToMultiplier(Stats.Level.Value);
 
         //change atk range & scale
         Stats.AtkRange.Set(Stats.AtkRange.BaseValue * mult);
-        Core.DISPLAY.Scale = mult;
+        Range = Stats.AtkRange.Value;
+        Core.DISPLAY.SetSkinScale(mult);
     }
 
     protected float LevelToMultiplier(float level)
@@ -122,7 +134,7 @@ public class Character : GameUnit, ICharacter
         return result;
     }
 
-    protected int LevelToAddend(float level)
+    protected int LevelToAdd(float level)
     {
         int result = level switch
         {
@@ -131,10 +143,32 @@ public class Character : GameUnit, ICharacter
             >= 8 and < 12 => 3,
             >= 12 and < 20 => 4,
             >= 20 => 5,
-            _ => 1 // default
+            _ => 0 // default
         };
 
         return result;
+    }
+
+    #endregion
+
+    #region BOOSTER
+
+    [HideInInspector]
+    public bool IsBoost = false;
+
+    public void BoosterUp()
+    {
+        if (!IsBoost)
+        {
+            IsBoost = true;
+            Range = Stats.AtkRange.Value * 1.5f;
+        }
+    }
+
+    public void BoosterOff()
+    {
+        IsBoost = false;
+        Range = Stats.AtkRange.Value;
     }
 
     #endregion

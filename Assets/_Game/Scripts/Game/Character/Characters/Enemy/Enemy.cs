@@ -11,7 +11,7 @@ public class Enemy : Character
     public override void OnInit(CharacterStats stats = null)
     {
         base.OnInit(stats);
-        TurnOnIndicator(false);
+        Core.DISPLAY.TurnIndicator(false);
         WeaponId = Random.Range(0, DataManager.Ins.Get<EquipmentData>().weapons.Count);
 
         StartNavigation(false);
@@ -23,16 +23,9 @@ public class Enemy : Character
         StartNavigation(false);
     }
 
-    [SerializeField]
-    GameObject indicator;
-
-    public void TurnOnIndicator(bool isOn)
+    public void SetUp(int initLevel)
     {
-        indicator.SetActive(isOn);
-    }
-
-    public void SetUp()
-    {
-        //TODO: set random skin or smthg'
+        Stats.Level.Set(initLevel);
+        UpdateParamByLevel();
     }
 }

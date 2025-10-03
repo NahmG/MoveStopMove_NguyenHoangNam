@@ -38,6 +38,7 @@ public class BulletBase : GameUnit
         this.moveDir = moveDir.normalized;
         skin.transform.rotation = Quaternion.LookRotation(moveDir);
 
+        maxRange = range;
         startpos = TF.position;
         Size = size;
     }
@@ -65,7 +66,6 @@ public class BulletBase : GameUnit
         if (other.TryGetComponent(out Character _target))
         {
             OnHitTarget(_target);
-            OnDespawn();
         }
     }
 
@@ -75,5 +75,6 @@ public class BulletBase : GameUnit
         //OnHit
         source.OnLevelUp(target.Stats.Level.Value);
         target.OnHit(10);
+        OnDespawn();
     }
 }
