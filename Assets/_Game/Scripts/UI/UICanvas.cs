@@ -11,7 +11,7 @@ public class UICanvas : MonoBehaviour
 
     [Header("Anim")]
     [SerializeField]
-    private bool useAnimator;
+    protected bool useAnimator;
     [ShowIf("useAnimator")]
     [SerializeField]
     Animator anim;

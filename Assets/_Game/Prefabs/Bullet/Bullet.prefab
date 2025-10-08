@@ -147,11 +147,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skinTF: {fileID: 1750019250264291420}
   poolType: 100
-  lifeTime: 0.8
   speed: 10
   rotateSpeed: 0
   defaultSize: 1
   skin: {fileID: 4282845996885073819}
+  col: {fileID: 2649030351837026518}
 --- !u!1001 &3302028732903046354
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -53,7 +53,8 @@ public class UIGameplay : UICanvas
 
     void OnSettingBtnClick(int index)
     {
-
+        Hide();
+        UIManager.Ins.OpenUI<UISetting>();
     }
 
     #region INDICATOR

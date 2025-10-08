@@ -76,5 +76,6 @@ public enum PoolType
     PLAYER = 1,
     ENEMY = 2,
     INDICATOR = 3,
+    AUDIO = 4,
     BULLET = 100,
 }

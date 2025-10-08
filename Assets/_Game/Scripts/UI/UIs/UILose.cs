@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -52,6 +53,10 @@ public class UILose : UICanvas
     void OnContinueBtnClick(int index)
     {
         Hide();
-        GameplayManager.Ins.LoadGame();
+        Action[] actions = new Action[]{
+            GameplayManager.Ins.ReconstructLevel,
+            ()=>UIManager.Ins.OpenUI<UIMainMenu>()
+        };
+        UIManager.Ins.OpenUI<UILoading>(actions);
     }
 }

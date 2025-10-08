@@ -2041,6 +2041,7 @@ GameObject:
   - component: {fileID: 9159988162115475508}
   - component: {fileID: 6752788136734812794}
   - component: {fileID: 6637799184487410751}
+  - component: {fileID: 1051489604066377571}
   - component: {fileID: 8766672263417463692}
   m_Layer: 5
   m_Name: Canvas-MainMenu
@@ -2121,7 +2122,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &6637799184487410751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2139,6 +2140,28 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 127
+--- !u!95 &1051489604066377571
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5729707699065319002}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1b297c3242ac51d48964c74804c30410, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &8766672263417463692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2152,8 +2175,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDestroyOnClose: 0
-  useAnimator: 0
-  anim: {fileID: 0}
+  useAnimator: 1
+  anim: {fileID: 1051489604066377571}
   rectTf: {fileID: 8147344188877507134}
   playBtn: {fileID: 3637773984082643896}
   skinShop: {fileID: 7474976233029596103}

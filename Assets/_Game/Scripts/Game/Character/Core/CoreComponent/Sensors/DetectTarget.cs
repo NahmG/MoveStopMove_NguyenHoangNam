@@ -9,8 +9,9 @@ public class DetectTarget : BaseSensor
 {
     [SerializeField]
     Character _char;
+    [SerializeField]
+    LayerMask obstacle;
     Collider sourceCol;
-
     Character _currentTarget;
     Collider[] colliders = new Collider[10];
     List<Collider> hostileColliders = new();
@@ -44,7 +45,7 @@ public class DetectTarget : BaseSensor
         {
             GetTarget(hostileColliders);
         }
-        else if (Vector3.Distance(_currentTarget.TF.position, transform.position) > (_radius + .6f) || _currentTarget.IsDead)
+        else if (Vector3.Distance(_currentTarget.TF.position, transform.position) > (_radius + .6f) || _currentTarget.IsDead || IsBlock(_currentTarget))
         {
             RemoveTarget();
         }
@@ -74,7 +75,7 @@ public class DetectTarget : BaseSensor
         int index = 0;
         while (index < cols.Count)
         {
-            if (cols[index] != sourceCol && cols[index].TryGetComponent(out Character _target) && !_target.IsDead)
+            if (cols[index] != sourceCol && cols[index].TryGetComponent(out Character _target) && !_target.IsDead && !IsBlock(_target))
             {
                 _currentTarget = _target;
                 if (_char is Player && _currentTarget is Enemy _e)
@@ -86,6 +87,12 @@ public class DetectTarget : BaseSensor
         }
 
         Sensor.Target = _currentTarget;
+    }
+
+    bool IsBlock(Character _target)
+    {
+        Vector3 dir = _target.TF.position - _char.TF.position;
+        return Physics.Raycast(transform.position, dir, _radius + 1, obstacle);
     }
 
     public void RemoveTarget()

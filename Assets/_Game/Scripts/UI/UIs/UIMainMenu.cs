@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using Sirenix.Utilities;
 using UnityEngine;
 
@@ -33,6 +34,16 @@ public class UIMainMenu : UICanvas
     {
         base.Open(param);
         GameplayManager.Ins.mainCam.ChangeCamera(CAMERA_TYPE.MENU);
+        ChangeAnim("Open");
+    }
+
+    public override void Hide()
+    {
+        ChangeAnim("Close");
+        if (useAnimator)
+        {
+            DOVirtual.DelayedCall(.5f, () => base.Hide());
+        }
     }
 
     void OnPlayButtonClick(int index)

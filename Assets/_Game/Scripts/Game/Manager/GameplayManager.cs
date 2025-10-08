@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,7 +11,10 @@ public class GameplayManager : Singleton<GameplayManager>
     Player player;
     public Player Player => player;
     Level currentLevel;
+
     UIGameplay uiGameplay;
+    UIMainMenu uiMainMenu;
+
     bool isGameEnd;
     bool isRevive;
 
@@ -21,15 +25,22 @@ public class GameplayManager : Singleton<GameplayManager>
     void Start()
     {
         LevelManager.Ins.OnInit();
+
         uiGameplay = UIManager.Ins.GetUI<UIGameplay>();
         uiGameplay.Close();
+        uiMainMenu = UIManager.Ins.GetUI<UIMainMenu>();
+        uiMainMenu.Close();
 
-        LoadGame();
+        Action[] actions = new Action[]{
+            ReconstructLevel,
+            ()=>uiMainMenu.Open()
+        };
+        UIManager.Ins.OpenUI<UILoading>(actions);
     }
 
     public void LoadGame()
     {
-        UIManager.Ins.OpenUI<UIMainMenu>();
+        uiMainMenu.Open();
         ReconstructLevel();
     }
 

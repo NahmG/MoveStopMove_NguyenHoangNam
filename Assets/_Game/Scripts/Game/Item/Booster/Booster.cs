@@ -7,7 +7,7 @@ public class Booster : MonoBehaviour
     Transform TF;
     BoosterController controller;
 
-    float height = 3f;
+    float height = 5f;
 
     public void Init(BoosterController controller)
     {
@@ -36,6 +36,6 @@ public class Booster : MonoBehaviour
 
     void AnimationDrop()
     {
-        TF.DOMoveY(0, .3f).SetEase(Ease.InQuad);
+        TF.DOMoveY(0, 1f).SetEase(Ease.InQuad);
     }
 }

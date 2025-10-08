@@ -103,7 +103,10 @@ public class EnemySpawn : Singleton<EnemySpawn>
     int GetEnemyInitLevel()
     {
         float playerLvl = GameplayManager.Ins.Player.Stats.Level.Value;
-        int rnd = (int)URandom.Range(1, playerLvl / 2);
+        int rnd;
+        if (playerLvl >= 2)
+            rnd = (int)URandom.Range(1, playerLvl / 2);
+        else rnd = 1;
         return rnd;
     }
 

@@ -71,6 +71,8 @@ public class UIButton : MonoBehaviour
     void OnBtnClick()
     {
         //play sound
+        AudioManager.Ins.PlaySFXClip(SFX_TYPE.CLICK, transform, 1);
+
         _OnClick?.Invoke(index);
     }
 }

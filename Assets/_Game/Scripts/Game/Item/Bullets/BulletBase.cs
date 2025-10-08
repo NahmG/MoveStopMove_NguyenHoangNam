@@ -1,4 +1,6 @@
 using System;
+using DG.Tweening;
+using NUnit.Framework;
 using UnityEngine;
 
 public class BulletBase : GameUnit
@@ -10,13 +12,16 @@ public class BulletBase : GameUnit
     float defaultSize;
     [SerializeField]
     BulletSkin skin;
+    [SerializeField]
+    Collider col;
 
     protected Character source;
     bool isFired;
     float maxRange;
     Vector3 moveDir;
     Vector3 startpos;
-    Quaternion rotation;
+    bool isBoost;
+    bool isStop;
 
     float _size;
     public float Size
@@ -32,7 +37,8 @@ public class BulletBase : GameUnit
     public void Fire(Vector3 moveDir, Character source, float size, float range, int modelId = -1, bool isBoost = false)
     {
         isFired = true;
-        skin.ShowModel(modelId);
+        isStop = false;
+        col.enabled = true;
 
         this.source = source;
         this.moveDir = moveDir.normalized;
@@ -41,6 +47,13 @@ public class BulletBase : GameUnit
         maxRange = range;
         startpos = TF.position;
         Size = size;
+
+        skin.ShowModel(modelId);
+        this.isBoost = isBoost;
+        if (isBoost)
+        {
+            TF.DOScale(Size * 2, 1f);
+        }
     }
 
     public void OnDespawn()
@@ -56,8 +69,11 @@ public class BulletBase : GameUnit
             if (Vector3.Distance(TF.position, startpos) >= maxRange)
                 OnDespawn();
 
-            transform.Translate(speed * Time.deltaTime * moveDir);
-            TF.Rotate(rotateSpeed * Time.deltaTime * Vector3.up);
+            if (!isStop)
+            {
+                transform.Translate(speed * Time.deltaTime * moveDir);
+                TF.Rotate(rotateSpeed * Time.deltaTime * Vector3.up);
+            }
         }
     }
 
@@ -67,6 +83,11 @@ public class BulletBase : GameUnit
         {
             OnHitTarget(_target);
         }
+
+        if (other.TryGetComponent<Obstacle>(out _))
+        {
+            OnHitObstacle();
+        }
     }
 
     void OnHitTarget(Character target)
@@ -75,6 +96,15 @@ public class BulletBase : GameUnit
         //OnHit
         source.OnLevelUp(target.Stats.Level.Value);
         target.OnHit(10);
-        OnDespawn();
+        if (!isBoost)
+            OnDespawn();
+    }
+
+    void OnHitObstacle()
+    {
+        isStop = true;
+        col.enabled = false;
+
+        DOVirtual.DelayedCall(1.5f, () => OnDespawn());
     }
 }

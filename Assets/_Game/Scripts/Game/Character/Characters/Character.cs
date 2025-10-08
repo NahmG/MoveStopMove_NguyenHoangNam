@@ -161,7 +161,7 @@ public class Character : GameUnit, ICharacter
         if (!IsBoost)
         {
             IsBoost = true;
-            Range = Stats.AtkRange.Value * 1.5f;
+            Range = Stats.AtkRange.Value * 1.8f;
         }
     }
 

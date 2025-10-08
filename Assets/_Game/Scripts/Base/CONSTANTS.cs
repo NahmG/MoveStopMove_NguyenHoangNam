@@ -13,4 +13,5 @@ public static class CONSTANTS
     public const string COLOR_DATA_PATH = "ColorData";
     //layer 
     public const string CHARACTER_LAYER = "Character";
+    public const string OBSTACLE_LAYER = "Obstacle";
 }
